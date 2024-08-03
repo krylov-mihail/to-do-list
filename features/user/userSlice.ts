@@ -10,6 +10,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState: {
     user: null,
+    dataLoaded: false,
   },
   reducers: {
     login: (state, action) => {
@@ -19,8 +20,15 @@ export const userSlice = createSlice({
     logout: (state) => {
       state.user = null;
     },
+    updateLoadState: (state) => {
+      state.dataLoaded = true;
+    },
   },
 });
-export const { login, logout } = userSlice.actions;
+export const { login, logout, updateLoadState } = userSlice.actions;
+
 export const selectUser = (state: { user: { user: any } }) => state.user.user;
+export const getLoadState = (state: { user: { dataLoaded: boolean } }) =>
+  state.user.dataLoaded;
+
 export default userSlice.reducer;
