@@ -1,4 +1,3 @@
-import { Stack } from "expo-router";
 import { Provider } from "react-redux";
 import { store } from "@/store";
 import {
@@ -13,6 +12,7 @@ import {
   useTheme,
 } from "@react-navigation/native";
 
+import { Stack } from "expo-router";
 import { Slot } from "expo-router";
 
 const theme = {
@@ -71,6 +71,7 @@ const theme = {
   },
 };
 import { adaptNavigationTheme } from "react-native-paper";
+
 const { LightTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
 });
