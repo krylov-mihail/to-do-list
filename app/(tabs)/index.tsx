@@ -43,8 +43,6 @@ export default function Index() {
       <Logout></Logout>
 
       <TodosList />
-      <Link href="/search">Search</Link>
-      <Link href="/explore">Explore</Link>
 
       <Text>End of the page</Text>
     </View>

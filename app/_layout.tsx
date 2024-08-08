@@ -3,6 +3,7 @@ import { store } from "@/store";
 import {
   MD3LightTheme as DefaultTheme,
   PaperProvider,
+  Button,
 } from "react-native-paper";
 
 import {
@@ -71,6 +72,10 @@ const theme = {
   },
 };
 import { adaptNavigationTheme } from "react-native-paper";
+import { useState } from "react";
+
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Drawer } from "expo-router/drawer";
 
 const { LightTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -82,8 +87,12 @@ export default function RootLayout() {
       <PaperProvider theme={theme}>
         <ThemeProvider value={LightTheme}>
           <Stack>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="(tabs)"
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack>
         </ThemeProvider>
       </PaperProvider>
