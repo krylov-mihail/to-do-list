@@ -1,5 +1,5 @@
 import { Provider } from "react-redux";
-import { store } from "@/store";
+import { store } from "@/lib/store";
 import {
   MD3LightTheme as DefaultTheme,
   PaperProvider,

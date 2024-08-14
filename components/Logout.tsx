@@ -3,7 +3,7 @@ import { auth } from "../firebase.Config.js";
 
 import { Button, TextInput } from "react-native-paper";
 
-import { logout } from "@/features/user/userSlice";
+import { logout } from "@/lib/features/user/userSlice";
 
 import { useDispatch } from "react-redux";
 

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useColorScheme } from "@/lib/hooks/useColorScheme";
 import { Button } from "react-native-paper";
 
 import { Drawer as PaperDrawer } from "react-native-paper";

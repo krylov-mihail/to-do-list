@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { TodosList } from "@/features/todos/todosList";
+import { TodosList } from "@/lib/features/todos/todosList";
 
 import * as React from "react";
 import { auth } from "../../firebase.Config.js";
@@ -14,7 +14,7 @@ import { Button, TextInput } from "react-native-paper";
 import Login from "@/components/Login";
 import Logout from "@/components/Logout";
 
-import { selectUser, getLoadState } from "@/features/user/userSlice";
+import { selectUser, getLoadState } from "@/lib/features/user/userSlice";
 
 import { useSelector, useDispatch } from "react-redux";
 

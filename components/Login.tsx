@@ -18,7 +18,7 @@ import {
   selectUser,
   getLoadState,
   updateLoadState,
-} from "@/features/user/userSlice";
+} from "@/lib/features/user/userSlice";
 
 import { useSelector, useDispatch } from "react-redux";
 
