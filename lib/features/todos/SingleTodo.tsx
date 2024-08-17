@@ -15,6 +15,7 @@ import { IconSource } from "react-native-paper/lib/typescript/components/Icon";
 import { ThemeProp } from "react-native-paper/lib/typescript/types";
 import { selectTodoById } from "./todosSlice";
 import { selectProjectById } from "../projects/projectsSlice";
+import { TimeSpan } from "@/components/TimeSpan";
 
 type SingleTodoProps = {
   slug: string | undefined;
@@ -50,6 +51,7 @@ export const SingleTodo = (props: SingleTodoProps) => {
       />
       <Card.Content>
         <Chip icon="folder">{project?.title}</Chip>
+        <TimeSpan timestamp={todoItem.deadline} />
         <Text variant="titleLarge">{todoItem.title}</Text>
         <Text variant="bodyMedium">{todoItem.desc}</Text>
       </Card.Content>

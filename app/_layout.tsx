@@ -16,6 +16,10 @@ import {
 import { Stack } from "expo-router";
 import { Slot } from "expo-router";
 
+/* translation for date picker */
+import { enGB, registerTranslation } from "react-native-paper-dates";
+registerTranslation("en-GB", enGB);
+
 const theme = {
   ...DefaultTheme,
   colors: {

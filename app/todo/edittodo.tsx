@@ -3,5 +3,5 @@ import { useLocalSearchParams } from "expo-router";
 
 export default function EditTodoPage() {
   const { slug } = useLocalSearchParams();
-  return <EditTodoForm slug={slug} />;
+  return <EditTodoForm slug={slug as string} />;
 }
