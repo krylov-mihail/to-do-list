@@ -4,7 +4,7 @@ import { RootState } from "@/lib/store";
 import { GestureResponderEvent, View } from "react-native";
 
 import { List, useTheme } from "react-native-paper";
-import { AddPostForm } from "./AddProjectForm";
+import { AddProjectForm } from "./AddProjectForm";
 
 export const ProjectsList = () => {
   const projects = useAppSelector(
@@ -30,7 +30,7 @@ export const ProjectsList = () => {
         <List.Subheader>Projects</List.Subheader>
         {renderedProjectsList}
       </List.Section>
-      <AddPostForm />
+      <AddProjectForm />
     </View>
   );
 };

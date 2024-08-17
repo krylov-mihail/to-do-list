@@ -1,25 +1,24 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "@/store";
-import { View } from "react-native";
+import { RootState } from "@/lib/store";
+import { View, StyleSheet } from "react-native";
 
-import { List, MD3Colors } from "react-native-paper";
+import { FAB, List, MD3Colors } from "react-native-paper";
+import { AddTodoForm } from "./AddTodoForm";
+import { Link } from "expo-router";
 
 export const TodosList = () => {
   const todos = useSelector((state: RootState) => state.todos.todos);
-
-  /*<article className="todo-excerpt" key={todo.id}>
-      <h3>{todo.title}</h3>
-      <p className="todo-content">{todo.content.substring(0, 100)}</p>
-    </article>*/
-
+  /**/
   const renderedTodoList = todos.map((todo) => (
-    <List.Item
-      key={todo.id}
-      title={todo.title}
-      description={todo.content.substring(0, 100)}
-      left={() => <List.Icon color={MD3Colors.tertiary70} icon="folder" />}
-    />
+    <Link key={todo.id} href={`/todo/${todo.id}`} asChild>
+      <List.Item
+        key={todo.id}
+        title={todo.title}
+        description={todo.desc.substring(0, 100)}
+        left={() => <List.Icon color={MD3Colors.tertiary70} icon="folder" />}
+      />
+    </Link>
   ));
 
   return (

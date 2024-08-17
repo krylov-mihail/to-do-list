@@ -93,6 +93,21 @@ export default function RootLayout() {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="todo/[slug]"
+              options={{
+                // Set the presentation mode to modal for our modal route.
+                presentation: "modal",
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="todo/addtodo"
+              options={{
+                // Set the presentation mode to modal for our modal route.
+                presentation: "containedModal",
+              }}
+            />
           </Stack>
         </ThemeProvider>
       </PaperProvider>

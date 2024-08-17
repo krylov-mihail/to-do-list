@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define a TS type for the data we'll be using
-export interface Post {
+export interface Project {
   id: string;
   title: string;
   desc: string;
@@ -21,11 +21,17 @@ export const projectsSlice = createSlice({
   initialState,
   reducers: {
     addProject: (state, action) => {
+      // "Mutate" the existing state array, which is
+      // safe to do here because `createSlice` uses Immer inside.
       state.projects.push(action.payload);
     },
   },
 });
+// Export the auto-generated action creator with the same name
+
 export const { addProject } = projectsSlice.actions;
-export const selectUser = (state: { projects: { projects: any } }) =>
+
+export const selectProjects = (state: { projects: { projects: any } }) =>
   state.projects.projects;
+
 export default projectsSlice.reducer;

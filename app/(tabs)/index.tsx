@@ -18,6 +18,8 @@ import { selectUser, getLoadState } from "@/lib/features/user/userSlice";
 
 import { useSelector, useDispatch } from "react-redux";
 
+import { FABButton } from "@/components/FABButton";
+
 import { Link } from "expo-router";
 
 export default function Index() {
@@ -34,17 +36,18 @@ export default function Index() {
     <View
       style={{
         flex: 1,
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-      <Text>Welcome {currentUser.email}</Text>
+      <Text>Welcome {currentUser.user.email}</Text>
       <Logout></Logout>
 
       <TodosList />
 
       <Text>End of the page</Text>
+
+      <FABButton />
     </View>
   );
 }
