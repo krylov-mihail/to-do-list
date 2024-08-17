@@ -1,3 +1,4 @@
+import { RootState } from "@/lib/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define a TS type for the data we'll be using
@@ -31,7 +32,9 @@ export const projectsSlice = createSlice({
 
 export const { addProject } = projectsSlice.actions;
 
-export const selectProjects = (state: { projects: { projects: any } }) =>
-  state.projects.projects;
+export const selectAllProjects = (state: RootState) => state.projects.projects;
+
+export const selectProjectById = (state: RootState, projectId: string | null) =>
+  state.projects.projects.find((project) => project.id === projectId);
 
 export default projectsSlice.reducer;

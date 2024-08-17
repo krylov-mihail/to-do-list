@@ -6,11 +6,14 @@ import { View, StyleSheet } from "react-native";
 import { FAB, List, MD3Colors } from "react-native-paper";
 import { AddTodoForm } from "./AddTodoForm";
 import { Link } from "expo-router";
+import { selectAllTodos } from "./todosSlice";
+import { useAppSelector } from "@/lib/hooks";
 
 export const TodosList = () => {
-  const todos = useSelector((state: RootState) => state.todos.todos);
+  const todos = useAppSelector(selectAllTodos);
+
   /**/
-  const renderedTodoList = todos.map((todo) => (
+  const renderedTodoList = todos.todos.map((todo) => (
     <Link key={todo.id} href={`/todo/${todo.id}`} asChild>
       <List.Item
         key={todo.id}

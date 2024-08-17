@@ -1,21 +1,23 @@
 import React, { ReactNode } from "react";
 
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
-import { todoUpdated } from "./todosSlice";
+import { selectTodoById, todoUpdated } from "./todosSlice";
 import { GestureResponderEvent, View } from "react-native";
 import { Button, TextInput, Title } from "react-native-paper";
 import { router } from "expo-router";
+import { Dropdown } from "react-native-paper-dropdown";
+import { selectAllProjects } from "../projects/projectsSlice";
 
 // omit form element types
 
 type EditTodoForm = {
-  slug: string | string[] | undefined;
+  slug: string | undefined;
   children?: ReactNode;
 };
 
 export const EditTodoForm = (props: EditTodoForm) => {
   const todoItem = useAppSelector((state) =>
-    state.todos.todos.find((todo) => todo.id === props.slug)
+    selectTodoById(state, props.slug!)
   );
 
   const dispatch = useAppDispatch();
@@ -29,6 +31,9 @@ export const EditTodoForm = (props: EditTodoForm) => {
   }
   const [inputTitle, setInputTitle] = React.useState(todoItem.title);
   const [inputDesc, setInputDesc] = React.useState(todoItem.desc);
+  const [inputProject, setInputProject] = React.useState(todoItem.projectId);
+
+  const projects = useAppSelector((state) => selectAllProjects(state));
 
   const handleSubmit = (e: GestureResponderEvent) => {
     // Prevent server submission
@@ -36,7 +41,12 @@ export const EditTodoForm = (props: EditTodoForm) => {
 
     if (inputTitle && inputDesc) {
       dispatch(
-        todoUpdated({ id: todoItem.id, title: inputTitle, desc: inputDesc })
+        todoUpdated({
+          id: todoItem.id,
+          title: inputTitle,
+          desc: inputDesc,
+          projectId: inputProject,
+        })
       );
 
       router.back();
@@ -57,6 +67,20 @@ export const EditTodoForm = (props: EditTodoForm) => {
         label="Todo Description:"
         value={inputDesc}
         onChangeText={(text) => setInputDesc(text)}
+      />
+
+      <Dropdown
+        label="Project"
+        placeholder="Select Project"
+        options={projects.map((project) => ({
+          label: project.title,
+          value: project.id,
+        }))}
+        value={inputProject}
+        onSelect={(text?: string) => {
+          console.log(text);
+          setInputProject(text as string);
+        }}
       />
 
       <Button

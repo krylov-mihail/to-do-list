@@ -5,7 +5,7 @@ import { StatusBar } from "expo-status-bar";
 
 export default function TodoPage() {
   const isPresented = router.canGoBack();
-  const { slug } = useLocalSearchParams();
+  const { slug } = useLocalSearchParams<{ slug: string }>();
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>

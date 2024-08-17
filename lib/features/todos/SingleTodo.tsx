@@ -9,12 +9,15 @@ import {
   Text,
   AvatarIconProps,
   Title,
+  Chip,
 } from "react-native-paper";
 import { IconSource } from "react-native-paper/lib/typescript/components/Icon";
 import { ThemeProp } from "react-native-paper/lib/typescript/types";
+import { selectTodoById } from "./todosSlice";
+import { selectProjectById } from "../projects/projectsSlice";
 
 type SingleTodoProps = {
-  slug: string | string[] | undefined;
+  slug: string | undefined;
   children?: ReactNode;
 };
 
@@ -23,10 +26,8 @@ const LeftContent = (props: { size: number }) => (
 );
 
 export const SingleTodo = (props: SingleTodoProps) => {
-  console.log(props.slug);
-
   const todoItem = useAppSelector((state) =>
-    state.todos.todos.find((todo) => todo.id === props.slug)
+    selectTodoById(state, props.slug!)
   );
 
   if (!todoItem) {
@@ -36,15 +37,19 @@ export const SingleTodo = (props: SingleTodoProps) => {
       </View>
     );
   }
+  const project = useAppSelector((state) =>
+    selectProjectById(state, todoItem.projectId)
+  );
 
   return (
     <Card>
       <Card.Title
-        title="Todo Title"
+        title="Todo Task"
         subtitle="Todo Subtitle"
         left={LeftContent}
       />
       <Card.Content>
+        <Chip icon="folder">{project?.title}</Chip>
         <Text variant="titleLarge">{todoItem.title}</Text>
         <Text variant="bodyMedium">{todoItem.desc}</Text>
       </Card.Content>
@@ -57,7 +62,7 @@ export const SingleTodo = (props: SingleTodoProps) => {
         >
           Edit
         </Button>
-        <Button onPress={router.back}>Ok</Button>
+        <Button onPress={router.back}>Back to list</Button>
       </Card.Actions>
     </Card>
   );
