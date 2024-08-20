@@ -37,7 +37,8 @@ export const AddTodoForm = () => {
         inputTitle,
         inputDesc,
         inputProject,
-        inputDeadline.toISOString()
+        inputDeadline.toISOString(),
+        "new"
       )
     );
     router.back();

@@ -18,7 +18,6 @@ const SideMenu = () => (
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const [count, setCount] = useState(0);
   return (
     <Tabs
       screenOptions={{

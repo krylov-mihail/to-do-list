@@ -10,6 +10,7 @@ const initialState = {
       desc: "Hello!",
       projectId: "1",
       deadline: sub(new Date(), { days: 2 }).toISOString(),
+      status: "new",
     },
     {
       id: "2",
@@ -17,6 +18,15 @@ const initialState = {
       desc: "More text",
       projectId: "2",
       deadline: add(new Date(), { days: 3 }).toISOString(),
+      status: "new",
+    },
+    {
+      id: "3",
+      title: "Third Task",
+      desc: "This is a task with a long description to check how it will look like rendered at the screen. This is a task with a long description to check how it will look like rendered at the screen.",
+      projectId: "2",
+      deadline: new Date().toISOString(),
+      status: "new",
     },
   ],
   status: "idle",
@@ -29,6 +39,7 @@ export interface Todo {
   desc: string;
   projectId: string;
   deadline: string;
+  status: "new" | "completed";
 }
 
 export const todosSlice = createSlice({
@@ -43,10 +54,11 @@ export const todosSlice = createSlice({
         title: string,
         desc: string,
         projectId: string,
-        deadline: string
+        deadline: string,
+        status: "new" | "completed"
       ) {
         return {
-          payload: { id: nanoid(), title, desc, projectId, deadline },
+          payload: { id: nanoid(), title, desc, projectId, deadline, status },
         };
       },
     },
@@ -61,6 +73,17 @@ export const todosSlice = createSlice({
         todo.deadline = deadline;
       }
     },
+    todoStatusUpdated: (
+      state,
+      action: PayloadAction<{ todoId: string; status: string }>
+    ) => {
+      const todoId = action.payload.todoId;
+      const todo = state.todos.find((todo) => todo.id === todoId);
+
+      if (todo) {
+        todo.status = action.payload.status;
+      }
+    },
   },
 });
 
@@ -69,6 +92,6 @@ export const selectAllTodos = (state: RootState) => state.todos;
 export const selectTodoById = (state: RootState, todoId: string) =>
   state.todos.todos.find((todo) => todo.id === todoId);
 
-export const { todoAdded, todoUpdated } = todosSlice.actions;
+export const { todoAdded, todoUpdated, todoStatusUpdated } = todosSlice.actions;
 export const selectUser = (state: { todos: { task: any } }) => state.todos.task;
 export default todosSlice.reducer;

@@ -51,6 +51,7 @@ export const EditTodoForm = (props: EditTodoForm) => {
           desc: inputDesc,
           projectId: inputProject,
           deadline: inputDeadline.toISOString(),
+          status: todoItem.status as "new" | "completed",
         })
       );
 
