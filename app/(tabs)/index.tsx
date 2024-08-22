@@ -1,9 +1,11 @@
 import {
   NativeSyntheticEvent,
   Pressable,
+  SafeAreaView,
   Text,
   TouchableOpacity,
   View,
+  StyleSheet,
 } from "react-native";
 import { TodosList } from "@/lib/features/todos/todosList";
 
@@ -33,13 +35,7 @@ export default function Index() {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
+    <SafeAreaView style={styles.container}>
       <Text>Welcome {currentUser.user.email}</Text>
       <Logout></Logout>
 
@@ -48,6 +44,15 @@ export default function Index() {
       <Text>End of the page</Text>
 
       <FABButton />
-    </View>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "#ecf0f1",
+    padding: 8,
+  },
+});

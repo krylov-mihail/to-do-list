@@ -45,7 +45,19 @@ export default function TabLayout() {
           title: "Search",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
+              name={focused ? "search-sharp" : "search-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="history"
+        options={{
+          title: "History",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "file-tray-full-sharp" : "file-tray-full-outline"}
               color={color}
             />
           ),
@@ -55,6 +67,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="explore"
         options={{
+          href: null,
           title: "Explore",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
@@ -71,7 +84,7 @@ export default function TabLayout() {
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
+              name={focused ? "albums" : "albums-outline"}
               color={color}
             />
           ),
