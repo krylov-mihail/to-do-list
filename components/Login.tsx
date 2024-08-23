@@ -2,7 +2,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { PropsWithChildren, useState } from "react";
 import { StyleSheet, useColorScheme } from "react-native";
 import * as React from "react";
-import { auth } from "../firebase.Config.js";
+import { auth } from "@/firebase.Config.js";
 
 import { Button, TextInput } from "react-native-paper";
 import {
