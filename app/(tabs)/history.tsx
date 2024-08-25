@@ -1,23 +1,33 @@
 import {
   selectAllTodos,
-  todoStatusUpdated,
+  updateTodoStatus,
+  ToDoStatusType,
 } from "@/lib/features/todos/todosSlice";
-import { useAppSelector } from "@/lib/hooks";
+import { selectUser } from "@/lib/features/user/userSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { Text, View } from "react-native";
 import { List, RadioButton } from "react-native-paper";
 import { useDispatch } from "react-redux";
 
 export default function Page() {
   const todos = useAppSelector(selectAllTodos);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const updateStatus = (todoId: string, status: string) => {
+  const currentUser = useAppSelector(selectUser);
+
+  const updateStatus = (todoId: string, status: ToDoStatusType) => {
     console.log("update status", { todoId, status });
 
-    dispatch(todoStatusUpdated({ todoId, status }));
+    dispatch(
+      updateTodoStatus({
+        todoId,
+        newStatus: status,
+        userId: currentUser.user.uid as string,
+      })
+    );
   };
 
-  const renderedTodoList = todos.todos.map((todo) => {
+  const renderedTodoList = todos.map((todo) => {
     return (
       todo.status == "completed" && (
         <List.Item

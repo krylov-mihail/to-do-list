@@ -7,7 +7,6 @@ import { Button, TextInput, Title } from "react-native-paper";
 import { router } from "expo-router";
 import { Dropdown } from "react-native-paper-dropdown";
 import { selectAllProjects } from "../projects/projectsSlice";
-import { DatePickerInput } from "react-native-paper-dates";
 import { useSelector } from "react-redux";
 import { selectUser } from "../user/userSlice";
 

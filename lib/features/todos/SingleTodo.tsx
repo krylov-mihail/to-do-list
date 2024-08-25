@@ -55,7 +55,7 @@ export const SingleTodo = (props: SingleTodoProps) => {
         <Text variant="titleLarge">{todoItem.title}</Text>
         <Text variant="bodyMedium">{todoItem.desc}</Text>
       </Card.Content>
-      <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
+
       <Card.Actions>
         <Button
           onPress={() => {

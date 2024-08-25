@@ -1,41 +1,28 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { PropsWithChildren, useState } from "react";
-import { StyleSheet, useColorScheme } from "react-native";
+import { StyleSheet } from "react-native";
 import * as React from "react";
 import { auth } from "@/firebase.Config.js";
 
-import { Avatar, Button, Card, Icon, TextInput } from "react-native-paper";
-import {
-  NativeSyntheticEvent,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Avatar, Button, Card, TextInput } from "react-native-paper";
+import { Text, View } from "react-native";
 
 import {
   login,
-  logout,
   selectUser,
   getLoadState,
-  updateLoadState,
   addNewUser,
 } from "@/lib/features/user/userSlice";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
 } from "firebase/auth";
 import { useAppDispatch } from "@/lib/hooks";
 
 export default function Login() {
   /*const user = auth.currentUser;*/
 
-  let currentUser = useSelector(selectUser);
   let dataLoaded = useSelector(getLoadState);
   //const dispatch = useDispatch();
   const dispatch = useAppDispatch();
@@ -94,12 +81,6 @@ export default function Login() {
         console.log(errorMessage);
       });
   };
-
-  /*onAuthStateChanged(auth, (user) => {
-    dispatch(updateLoadState());
-
-
-  });*/
 
   const _onSignUpPressed = () => {
     const emailError = emailValidator(username.value);

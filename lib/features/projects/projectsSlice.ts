@@ -1,5 +1,5 @@
 import { RootState } from "@/lib/store";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { app as FirebaseApp } from "@/firebase.Config";
@@ -8,8 +8,6 @@ import {
   collection,
   getDocs,
   Firestore,
-  setDoc,
-  doc,
   addDoc,
 } from "firebase/firestore/lite";
 import { logout } from "../user/userSlice";
@@ -26,6 +24,7 @@ export interface Project {
 type ProjectUpdate = Pick<Project, "id" | "title" | "desc"> & {
   userId: string;
 };
+
 export type NewProjectType = Pick<Project, "title" | "desc"> & {
   userId: string;
 };

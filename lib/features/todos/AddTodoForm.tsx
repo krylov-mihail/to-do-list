@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import React from "react";
 import { GestureResponderEvent, View } from "react-native";
-import { Button, Text, TextInput, Title } from "react-native-paper";
+import { Button, TextInput, Title } from "react-native-paper";
 import { addNewTodo, NewTodoType, type Todo } from "./todosSlice";
 import { router } from "expo-router";
 import { selectAllProjects } from "../projects/projectsSlice";

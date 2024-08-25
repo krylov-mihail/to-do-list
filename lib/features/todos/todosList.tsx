@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
-import { View, StyleSheet, SafeAreaView, TouchableOpacity } from "react-native";
+import { View } from "react-native";
 import {
-  Button,
   Checkbox,
-  FAB,
   IconButton,
   List,
   ActivityIndicator,
@@ -18,7 +14,6 @@ import { Link } from "expo-router";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
 import {
-  fetchTodosByUser,
   selectAllTodos,
   selectTodosStatus,
   selectTodosError,
@@ -127,14 +122,14 @@ export const TodosList = () => {
 
   return (
     <View>
-      <ToggleButton
+      {/*<ToggleButton
         icon="checkbox-multiple-outline"
         value="checkbox-multiple-outline"
         status={multiMode as undefined & "checked" & "unchecked"}
         onPress={onButtonToggle}
-      />
+      />*/}
       <List.Section>
-        <List.Subheader>Todos</List.Subheader>
+        <List.Subheader>Tasks to complete</List.Subheader>
         {content}
       </List.Section>
     </View>
