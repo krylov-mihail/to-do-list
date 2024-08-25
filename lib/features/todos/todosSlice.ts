@@ -9,6 +9,7 @@ import {
   getDocs,
   Firestore,
 } from "firebase/firestore/lite";
+import { logout } from "../user/userSlice";
 
 const db = getFirestore(FirebaseApp);
 
@@ -146,15 +147,16 @@ export const todosSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      ./*addCase(userLoggedOut, state => {
-      // Clear out the list of posts whenever the user logs out
-      return initialState
-    }).*/ addCase(fetchTodosByUser.pending, (state, action) => {
+      .addCase(logout, (state) => {
+        // Clear out the list of todos whenever the user logs out
+        return initialState;
+      })
+      .addCase(fetchTodosByUser.pending, (state, action) => {
         state.status = "pending";
       })
       .addCase(fetchTodosByUser.fulfilled, (state, action) => {
         state.status = "succeeded";
-        // Add any fetched posts to the array
+        // Add any fetched todos to the array
         state.todos.push(...action.payload);
       })
       .addCase(fetchTodosByUser.rejected, (state, action) => {

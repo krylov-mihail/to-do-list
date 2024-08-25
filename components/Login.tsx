@@ -4,7 +4,7 @@ import { StyleSheet, useColorScheme } from "react-native";
 import * as React from "react";
 import { auth } from "@/firebase.Config.js";
 
-import { Button, TextInput } from "react-native-paper";
+import { Avatar, Button, Card, Icon, TextInput } from "react-native-paper";
 import {
   NativeSyntheticEvent,
   Text,
@@ -18,6 +18,7 @@ import {
   selectUser,
   getLoadState,
   updateLoadState,
+  addNewUser,
 } from "@/lib/features/user/userSlice";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -29,14 +30,15 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
+import { useAppDispatch } from "@/lib/hooks";
 
 export default function Login() {
-  const user = auth.currentUser;
+  /*const user = auth.currentUser;*/
 
   let currentUser = useSelector(selectUser);
   let dataLoaded = useSelector(getLoadState);
-  const dispatch = useDispatch();
-
+  //const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [username, setUsername] = React.useState({ value: "", error: "" });
   const [pswd, setPswd] = React.useState({ value: "", error: "" });
 
@@ -84,8 +86,6 @@ export default function Login() {
             },
           })
         );
-        //const user = ;
-        // ...
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -95,38 +95,11 @@ export default function Login() {
       });
   };
 
-  onAuthStateChanged(auth, (user) => {
+  /*onAuthStateChanged(auth, (user) => {
     dispatch(updateLoadState());
 
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      const uid = user.uid;
-      // dispatch(login({ user: user }));
-      // ...
-      console.log("signed in");
 
-      if (!currentUser) {
-        dispatch(
-          login({
-            user: {
-              email: user.email,
-              displayName: user.displayName,
-              emailVerified: user.emailVerified,
-              phoneNumber: user.phoneNumber,
-              photoURL: user.photoURL,
-              uid: user.uid,
-            },
-          })
-        );
-      }
-    } else {
-      // User is signed out
-      // ...
-
-      console.log("signed out");
-    }
-  });
+  });*/
 
   const _onSignUpPressed = () => {
     const emailError = emailValidator(username.value);
@@ -157,7 +130,9 @@ export default function Login() {
             },
           })
         );
-        // ...
+        // create  user in firestore
+
+        dispatch(addNewUser({ id: user.uid, email: user.email as string }));
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -185,46 +160,49 @@ export default function Login() {
       style={{
         flex: 1,
         justifyContent: "center",
-        alignItems: "center",
       }}
     >
-      <Text>Please login</Text>
-      <TextInput
-        label="Email"
-        returnKeyType="next"
-        value={username.value}
-        onChangeText={(text) => setUsername({ value: text, error: "" })}
-        error={!!username.error}
-        right={username.error}
-        autoCapitalize="none"
-        textContentType="emailAddress"
-        keyboardType="email-address"
-      ></TextInput>
-      <TextInput
-        label="Password"
-        returnKeyType="done"
-        value={pswd.value}
-        onChangeText={(text) => setPswd({ value: text, error: "" })}
-        error={!!pswd.error}
-        right={pswd.error}
-        secureTextEntry={true}
-      ></TextInput>
-      <Button mode="contained" onPress={_onLoginPressed}>
-        Login
-      </Button>
+      <Card>
+        <Card.Title
+          title="Welcome to the ToDo list App"
+          subtitle="Please login"
+          left={(props) => (
+            <Avatar.Icon {...props} icon="human-greeting-variant" />
+          )}
+        />
+        <Card.Content>
+          <TextInput
+            label="Email"
+            returnKeyType="next"
+            value={username.value}
+            onChangeText={(text) => setUsername({ value: text, error: "" })}
+            error={!!username.error}
+            right={username.error}
+            autoCapitalize="none"
+            textContentType="emailAddress"
+            keyboardType="email-address"
+          ></TextInput>
+          <TextInput
+            label="Password"
+            returnKeyType="done"
+            value={pswd.value}
+            onChangeText={(text) => setPswd({ value: text, error: "" })}
+            error={!!pswd.error}
+            right={pswd.error}
+            secureTextEntry={true}
+          ></TextInput>
+          <Card.Actions>
+            <Button mode="contained" onPress={_onLoginPressed}>
+              Login
+            </Button>
 
-      <View style={styles.row}>
-        <Text style={styles.label}>Don’t have an account? </Text>
-        <Button mode="contained" onPress={_onSignUpPressed}>
-          Sign Up
-        </Button>
-
-        {/*<TouchableOpacity
-            onPress={() => navigation.navigate("RegisterScreen")}
-          >
-            <Text style={styles.link}>Sign up</Text>
-          </TouchableOpacity>*/}
-      </View>
+            <Text>OR</Text>
+            <Button mode="contained" onPress={_onSignUpPressed}>
+              Sign Up
+            </Button>
+          </Card.Actions>
+        </Card.Content>
+      </Card>
     </View>
   );
 }

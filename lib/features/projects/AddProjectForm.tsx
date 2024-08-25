@@ -6,7 +6,14 @@ import { GestureResponderEvent } from "react-native";
 import { nanoid } from "@reduxjs/toolkit";
 import { useAppDispatch } from "@/lib/hooks";
 
-import { type Project, addProject } from "./projectsSlice";
+import {
+  NewProjectType,
+  type Project,
+  addNewProject,
+  addProject,
+} from "./projectsSlice";
+import { selectUser } from "../user/userSlice";
+import { useSelector } from "react-redux";
 
 // TS types for the input fields
 // See: https://epicreact.dev/how-to-type-a-react-form-on-submit-handler/
@@ -25,11 +32,15 @@ export const AddProjectForm = () => {
   // Get the `dispatch` method from the store
   const dispatch = useAppDispatch();
 
+  let currentUser = useSelector(selectUser);
+
+  console.log("currentUser", currentUser);
+
   // Create the post object and dispatch the `postAdded` action
-  const newProject: Project = {
-    id: nanoid(),
+  const newProject: NewProjectType = {
     title: inputTitle,
     desc: inputDesc,
+    userId: currentUser.user.uid,
   };
 
   const handleSubmit = (e: GestureResponderEvent) => {
@@ -37,7 +48,7 @@ export const AddProjectForm = () => {
     e.preventDefault();
 
     console.log("Values: ", { inputTitle, inputDesc });
-    dispatch(addProject(newProject));
+    dispatch(addNewProject(newProject));
   };
 
   return (

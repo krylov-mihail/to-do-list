@@ -24,24 +24,16 @@ import {
   selectTodosError,
   todoStatusUpdated,
 } from "./todosSlice";
+import { selectUser } from "../user/userSlice";
 
 export const TodosList = () => {
   /*get todos from Redux*/
   const todos = useAppSelector(selectAllTodos);
   const dispatch = useAppDispatch();
 
-  /*monitore loading status as we make a async request behind the scene */
   const todosStatus = useAppSelector(selectTodosStatus);
   /* in case we fail to fetch data from firebase, we will get error message  */
   const todosError = useAppSelector(selectTodosError);
-
-  // update todos if loading  status has changes
-  useEffect(() => {
-    if (todosStatus === "idle") {
-      // need to replace with real user id
-      dispatch(fetchTodosByUser("1"));
-    }
-  }, [todosStatus, dispatch]);
 
   // todo status update logic
   const updateStatus = (todoId: string, status: "new" | "completed") => {

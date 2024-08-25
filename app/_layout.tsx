@@ -1,20 +1,16 @@
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { store } from "@/lib/store";
 import {
   MD3LightTheme as DefaultTheme,
   PaperProvider,
-  Button,
 } from "react-native-paper";
+
+import Main from "@/components/Main";
 
 import {
   ThemeProvider,
-  DarkTheme,
   DefaultTheme as NavigationDefaultTheme,
-  useTheme,
 } from "@react-navigation/native";
-
-import { Stack } from "expo-router";
-import { Slot } from "expo-router";
 
 /* translation for date picker */
 import { enGB, registerTranslation } from "react-native-paper-dates";
@@ -76,10 +72,8 @@ const theme = {
   },
 };
 import { adaptNavigationTheme } from "react-native-paper";
-import { useState } from "react";
-
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Drawer } from "expo-router/drawer";
+import { selectUser } from "@/lib/features/user/userSlice";
+import { SafeAreaView } from "react-native";
 
 const { LightTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -90,29 +84,7 @@ export default function RootLayout() {
     <Provider store={store}>
       <PaperProvider theme={theme}>
         <ThemeProvider value={LightTheme}>
-          <Stack>
-            <Stack.Screen
-              name="(tabs)"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="todo/[slug]"
-              options={{
-                // Set the presentation mode to modal for our modal route.
-                presentation: "modal",
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="todo/addtodo"
-              options={{
-                // Set the presentation mode to modal for our modal route.
-                presentation: "containedModal",
-              }}
-            />
-          </Stack>
+          <Main />
         </ThemeProvider>
       </PaperProvider>
     </Provider>

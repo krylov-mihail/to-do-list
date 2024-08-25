@@ -1,3 +1,4 @@
+import Logout from "@/components/Logout";
 import { Link } from "expo-router";
 import { Pressable, Text } from "react-native";
 import { View } from "react-native";
@@ -29,6 +30,7 @@ export default function Page() {
           left={(props) => <List.Icon {...props} icon="trophy" />}
         />
       </Link>
+      <Logout></Logout>
     </View>
   );
 }
