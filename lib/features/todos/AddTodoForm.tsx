@@ -2,12 +2,14 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import React from "react";
 import { GestureResponderEvent, View } from "react-native";
 import { Button, Text, TextInput, Title } from "react-native-paper";
-import { todoAdded, type Todo } from "./todosSlice";
+import { addNewTodo, NewTodoType, type Todo } from "./todosSlice";
 import { router } from "expo-router";
 import { selectAllProjects } from "../projects/projectsSlice";
 import { Dropdown } from "react-native-paper-dropdown";
 import { DatePickerInput } from "react-native-paper-dates";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
+import { selectUser } from "../user/userSlice";
 
 export const AddTodoForm = () => {
   const [inputTitle, setInputTitle] = React.useState("");
@@ -21,26 +23,28 @@ export const AddTodoForm = () => {
   // Get the `dispatch` method from the store
   const dispatch = useAppDispatch();
 
+  const currentUser = useSelector(selectUser);
+
   const handleSubmit = (e: GestureResponderEvent) => {
     // Prevent server submission
     e.preventDefault();
 
-    console.log("Values: ", {
-      inputTitle,
-      inputDesc,
-      inputProject,
-      inputDeadline,
-    });
+    // for now we put deadline to the end of the Day ()
+    const now = inputDeadline.getTime();
+    let startOfDay = now - (now % 86400000);
+    let endDate = startOfDay + 86400000 - 10;
 
-    dispatch(
-      todoAdded(
-        inputTitle,
-        inputDesc,
-        inputProject,
-        inputDeadline.toISOString(),
-        "new"
-      )
-    );
+    const newTodo: NewTodoType = {
+      title: inputTitle,
+      desc: inputDesc,
+      projectId: inputProject,
+      deadline: new Date(endDate).toISOString(),
+      status: "new",
+      userId: currentUser.user.uid,
+    };
+
+    dispatch(addNewTodo(newTodo));
+
     router.back();
   };
 

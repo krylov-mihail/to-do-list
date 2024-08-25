@@ -29,7 +29,6 @@ export default function MainApp() {
   /* in case we fail to fetch data from firebase, we will get error message  */
   //const projectsLoadError = useAppSelector(selectProjectsLoadError);
 
-  // update todos if loading  status has changes
   useEffect(() => {
     if (projectsLoadStatus === "idle") {
       // need to replace with real user id
@@ -46,7 +45,7 @@ export default function MainApp() {
   useEffect(() => {
     if (todosStatus === "idle") {
       // need to replace with real user id
-      dispatch(fetchTodosByUser(currentUser.id));
+      dispatch(fetchTodosByUser(currentUser.user.uid));
     }
   }, [todosStatus, dispatch]);
 

@@ -22,7 +22,7 @@ import {
   selectAllTodos,
   selectTodosStatus,
   selectTodosError,
-  todoStatusUpdated,
+  updateTodoStatus,
 } from "./todosSlice";
 import { selectUser } from "../user/userSlice";
 
@@ -35,11 +35,19 @@ export const TodosList = () => {
   /* in case we fail to fetch data from firebase, we will get error message  */
   const todosError = useAppSelector(selectTodosError);
 
+  const currentUser = useAppSelector(selectUser);
+
   // todo status update logic
   const updateStatus = (todoId: string, status: "new" | "completed") => {
     console.log("update status", { todoId, status });
 
-    dispatch(todoStatusUpdated({ todoId, status }));
+    dispatch(
+      updateTodoStatus({
+        todoId,
+        newStatus: status,
+        userId: currentUser.user.uid,
+      })
+    );
   };
 
   /* state variables to manage  bulk task update */

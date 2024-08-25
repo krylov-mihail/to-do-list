@@ -8,6 +8,9 @@ import {
   collection,
   getDocs,
   Firestore,
+  addDoc,
+  setDoc,
+  doc,
 } from "firebase/firestore/lite";
 import { logout } from "../user/userSlice";
 
@@ -27,22 +30,7 @@ const initialState: {
       deadline: sub(new Date(), { days: 2 }).toISOString(),
       status: "new",
     },
-    {
-      id: "2",
-      title: "Second Task",
-      desc: "More text",
-      projectId: "2",
-      deadline: add(new Date(), { days: 3 }).toISOString(),
-      status: "new",
-    },
-    {
-      id: "3",
-      title: "Third Task",
-      desc: "This is a task with a long description to check how it will look like rendered at the screen. This is a task with a long description to check how it will look like rendered at the screen.",
-      projectId: "2",
-      deadline: new Date().toISOString(),
-      status: "new",
-    },*/
+   */
   ],
   status: "idle",
   error: null,
@@ -57,18 +45,30 @@ export interface Todo {
   status: "new" | "completed";
 }
 
+type TodoUpdateType = Pick<Todo, "id" | "title" | "desc" | "projectId"> & {
+  userId: string;
+};
+
+export type NewTodoType = Pick<
+  Todo,
+  "title" | "desc" | "projectId" | "deadline" | "status"
+> & {
+  userId: string;
+};
+
+export type ToDoStatusType = "new" | "completed";
+
 export const fetchTodosByUser = createAsyncThunk(
   "todos/fetchTodos",
   async (userId: string) => {
     const items = await getTodos(db, userId);
 
     const convertedItems = items.map((el) => {
-      const newDeadline = el.deadline.toDate().toISOString();
+      /* end of the selected day */
+      const newDeadline = new Date(el.deadline).toISOString();
       const newEl = { ...el, deadline: newDeadline };
       return newEl;
     });
-
-    console.log("convertedItems", convertedItems);
 
     return convertedItems as Array<Todo>;
   },
@@ -91,38 +91,97 @@ const getTodos = async (db: Firestore, userId: string) => {
     data.id = doc.id;
     return data;
   });
+
   return todosList;
 };
-/*
-export const fetchTodoById = createAsyncThunk(
-  'todos/fetchTodoById',
-  async (itemId: string) => {
-    const item = await someHttpRequest(itemId)
-    return item
+
+export const updateTodoStatus = createAsyncThunk(
+  "todos/updateTodoStatus",
+
+  async (data: {
+    userId: string;
+    todoId: string;
+    newStatus: ToDoStatusType;
+  }) => {
+    // We send the initial data to the firestore
+
+    const docRef = await setDoc(
+      doc(db, `users/user_${data.userId}/todos`, data.todoId),
+      {
+        status: data.newStatus,
+      },
+      { merge: true }
+    );
+    // The response includes the complete post object, including unique ID
+
+    return {
+      todoId: data.todoId,
+      status: data.newStatus,
+    };
   }
-)*/
+);
+
+export const updateTodo = createAsyncThunk(
+  "todos/updateTodo",
+
+  async (data: TodoUpdateType) => {
+    // We send the initial data to the firestore
+
+    const docRef = await setDoc(
+      doc(db, `users/user_${data.userId}/todos`, data.id),
+      {
+        title: data.title,
+        desc: data.desc,
+        projectId: data.projectId,
+      },
+      { merge: true }
+    );
+    // The response includes the complete post object, including unique ID
+
+    return {
+      id: data.id,
+      title: data.title,
+      desc: data.desc,
+      projectId: data.projectId,
+    };
+  }
+);
+
+export const addNewTodo = createAsyncThunk(
+  "todos/addNewTodo",
+  // The payload creator receives the partial `{title, desc, projectId,deadline, status, userId}` object
+  async (initialTodo: NewTodoType) => {
+    // We send the initial data to the firestore
+    // const response = await client.post<Post>("/fakeApi/posts", initialPost);
+
+    const docRef = await addDoc(
+      collection(db, `users/user_${initialTodo.userId}/todos`),
+      {
+        title: initialTodo.title,
+        desc: initialTodo.desc,
+        projectId: initialTodo.projectId,
+        deadline: initialTodo.deadline,
+        status: initialTodo.status,
+      }
+    );
+    // The response includes the complete post object, including unique ID
+
+    return {
+      id: docRef.id,
+      title: initialTodo.title,
+      desc: initialTodo.desc,
+      projectId: initialTodo.projectId,
+      deadline: initialTodo.deadline,
+      status: initialTodo.status,
+    };
+  }
+);
 
 export const todosSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
-    todoAdded: {
-      reducer(state, action: PayloadAction<Todo>) {
-        state.todos.push(action.payload);
-      },
-      prepare(
-        title: string,
-        desc: string,
-        projectId: string,
-        deadline: string,
-        status: "new" | "completed"
-      ) {
-        return {
-          payload: { id: nanoid(), title, desc, projectId, deadline, status },
-        };
-      },
-    },
-    todoUpdated: (state, action: PayloadAction<Todo>) => {
+    /* todoUpdated: (state, action: PayloadAction<Todo>) => {
       const todo = state.todos.find((todo) => todo.id === action.payload.id);
 
       const { title, desc, projectId, deadline } = action.payload;
@@ -133,7 +192,7 @@ export const todosSlice = createSlice({
         todo.deadline = deadline;
       }
     },
-    todoStatusUpdated: (
+    /* todoStatusUpdated: (
       state,
       action: PayloadAction<{ todoId: string; status: "new" | "completed" }>
     ) => {
@@ -143,7 +202,7 @@ export const todosSlice = createSlice({
       if (todo) {
         todo.status = action.payload.status;
       }
-    },
+    },*/
   },
   extraReducers: (builder) => {
     builder
@@ -157,11 +216,34 @@ export const todosSlice = createSlice({
       .addCase(fetchTodosByUser.fulfilled, (state, action) => {
         state.status = "succeeded";
         // Add any fetched todos to the array
+        console.log("todosSlice, 163, action.payload", action.payload);
         state.todos.push(...action.payload);
       })
       .addCase(fetchTodosByUser.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.error.message ?? "Unknown Error";
+      })
+      .addCase(addNewTodo.fulfilled, (state, action) => {
+        // We can directly add the new todo object to our todo array
+        state.todos.push(action.payload as Todo);
+      })
+      .addCase(updateTodoStatus.fulfilled, (state, action) => {
+        const todoId = action.payload.todoId;
+        const todo = state.todos.find((todo) => todo.id === todoId);
+
+        if (todo) {
+          todo.status = action.payload.status;
+        }
+      })
+      .addCase(updateTodo.fulfilled, (state, action) => {
+        const todoId = action.payload.id;
+        const todo = state.todos.find((todo) => todo.id === todoId);
+
+        if (todo) {
+          todo.title = action.payload.title;
+          todo.desc = action.payload.desc;
+          todo.projectId = action.payload.projectId;
+        }
       });
   },
 });
@@ -171,7 +253,6 @@ export const selectAllTodos = (state: RootState) => state.todos.todos;
 export const selectTodoById = (state: RootState, todoId: string) =>
   state.todos.todos.find((todo) => todo.id === todoId);
 
-export const { todoAdded, todoUpdated, todoStatusUpdated } = todosSlice.actions;
 export const selectUser = (state: { todos: { task: any } }) => state.todos.task;
 export default todosSlice.reducer;
 
