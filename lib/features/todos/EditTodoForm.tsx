@@ -1,13 +1,14 @@
 import React, { ReactNode } from "react";
 
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
-import { selectTodoById, todoUpdated } from "./todosSlice";
+import { selectTodoById, updateTodo } from "./todosSlice";
 import { GestureResponderEvent, View } from "react-native";
 import { Button, TextInput, Title } from "react-native-paper";
 import { router } from "expo-router";
 import { Dropdown } from "react-native-paper-dropdown";
 import { selectAllProjects } from "../projects/projectsSlice";
-import { DatePickerInput } from "react-native-paper-dates";
+import { useSelector } from "react-redux";
+import { selectUser } from "../user/userSlice";
 
 // omit form element types
 
@@ -33,11 +34,10 @@ export const EditTodoForm = (props: EditTodoForm) => {
   const [inputTitle, setInputTitle] = React.useState(todoItem.title);
   const [inputDesc, setInputDesc] = React.useState(todoItem.desc);
   const [inputProject, setInputProject] = React.useState(todoItem.projectId);
-  const [inputDeadline, setInputDeadline] = React.useState(
-    new Date(todoItem.deadline)
-  );
 
   const projects = useAppSelector((state) => selectAllProjects(state));
+
+  const currentUser = useSelector(selectUser);
 
   const handleSubmit = (e: GestureResponderEvent) => {
     // Prevent server submission
@@ -45,13 +45,12 @@ export const EditTodoForm = (props: EditTodoForm) => {
 
     if (inputTitle && inputDesc) {
       dispatch(
-        todoUpdated({
+        updateTodo({
+          userId: currentUser.user.uid,
           id: todoItem.id,
           title: inputTitle,
           desc: inputDesc,
           projectId: inputProject,
-          deadline: inputDeadline.toISOString(),
-          status: todoItem.status as "new" | "completed",
         })
       );
 
@@ -88,15 +87,6 @@ export const EditTodoForm = (props: EditTodoForm) => {
           setInputProject(text as string);
         }}
       />
-      <View style={{ height: 56 }}>
-        <DatePickerInput
-          locale="en-GB"
-          label="Deadline"
-          value={inputDeadline}
-          onChange={(d) => setInputDeadline(d as Date)}
-          inputMode="start"
-        />
-      </View>
 
       <Button
         style={{ marginTop: 15 }}

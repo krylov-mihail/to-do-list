@@ -1,14 +1,12 @@
 import Logout from "@/components/Logout";
 import { Link } from "expo-router";
-import { Pressable, Text } from "react-native";
+import { Text } from "react-native";
 import { View } from "react-native";
-import { Button, List } from "react-native-paper";
+import { List } from "react-native-paper";
 
 export default function Page() {
   return (
     <View>
-      <Text>Overview page</Text>
-
       <Link href="/settings" asChild>
         <List.Item
           title="Setting"

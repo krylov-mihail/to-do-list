@@ -3,7 +3,7 @@ import { useAppSelector } from "@/lib/hooks";
 import { RootState } from "@/lib/store";
 import { GestureResponderEvent, View } from "react-native";
 
-import { List, useTheme } from "react-native-paper";
+import { List, Title, useTheme } from "react-native-paper";
 import { AddProjectForm } from "./AddProjectForm";
 
 export const ProjectsList = () => {
@@ -26,10 +26,8 @@ export const ProjectsList = () => {
 
   return (
     <View>
-      <List.Section>
-        <List.Subheader>Projects</List.Subheader>
-        {renderedProjectsList}
-      </List.Section>
+      <Title>Your Projects</Title>
+      <List.Section>{renderedProjectsList}</List.Section>
       <AddProjectForm />
     </View>
   );

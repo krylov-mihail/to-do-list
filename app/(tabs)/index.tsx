@@ -1,19 +1,7 @@
-import {
-  NativeSyntheticEvent,
-  Pressable,
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from "react-native";
+import { SafeAreaView, Text, StyleSheet } from "react-native";
 import { TodosList } from "@/lib/features/todos/todosList";
 
 import * as React from "react";
-import { auth } from "../../firebase.Config.js";
-import { Button, TextInput } from "react-native-paper";
-
-import Logout from "@/components/Logout";
 
 import { selectUser, getLoadState } from "@/lib/features/user/userSlice";
 
@@ -32,8 +20,6 @@ export default function Index() {
       <Text>Welcome {currentUser.user.email}</Text>
       <TodosList />
 
-      <Text>End of the page</Text>
-
       <FABButton />
     </SafeAreaView>
   );
@@ -42,7 +28,7 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     backgroundColor: "#ecf0f1",
     padding: 8,
   },

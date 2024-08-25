@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
-import { View, StyleSheet, SafeAreaView, TouchableOpacity } from "react-native";
+import { View } from "react-native";
 import {
-  Button,
   Checkbox,
-  FAB,
   IconButton,
   List,
   ActivityIndicator,
@@ -18,11 +14,10 @@ import { Link } from "expo-router";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
 import {
-  fetchTodosByUser,
   selectAllTodos,
   selectTodosStatus,
   selectTodosError,
-  todoStatusUpdated,
+  updateTodoStatus,
 } from "./todosSlice";
 import { selectUser } from "../user/userSlice";
 
@@ -35,11 +30,19 @@ export const TodosList = () => {
   /* in case we fail to fetch data from firebase, we will get error message  */
   const todosError = useAppSelector(selectTodosError);
 
+  const currentUser = useAppSelector(selectUser);
+
   // todo status update logic
   const updateStatus = (todoId: string, status: "new" | "completed") => {
     console.log("update status", { todoId, status });
 
-    dispatch(todoStatusUpdated({ todoId, status }));
+    dispatch(
+      updateTodoStatus({
+        todoId,
+        newStatus: status,
+        userId: currentUser.user.uid,
+      })
+    );
   };
 
   /* state variables to manage  bulk task update */
@@ -119,14 +122,14 @@ export const TodosList = () => {
 
   return (
     <View>
-      <ToggleButton
+      {/*<ToggleButton
         icon="checkbox-multiple-outline"
         value="checkbox-multiple-outline"
         status={multiMode as undefined & "checked" & "unchecked"}
         onPress={onButtonToggle}
-      />
+      />*/}
       <List.Section>
-        <List.Subheader>Todos</List.Subheader>
+        <List.Subheader>Tasks to complete</List.Subheader>
         {content}
       </List.Section>
     </View>
