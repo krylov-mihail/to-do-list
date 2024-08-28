@@ -1,5 +1,5 @@
 import { RootState } from "@/lib/store";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import { sub, add } from "date-fns";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { app as FirebaseApp } from "@/firebase.Config";
@@ -13,6 +13,7 @@ import {
   doc,
 } from "firebase/firestore/lite";
 import { logout } from "../user/userSlice";
+import { useAppDispatch } from "@/lib/hooks";
 
 const db = getFirestore(FirebaseApp);
 
@@ -43,6 +44,7 @@ export interface Todo {
   projectId: string;
   deadline: string;
   status: "new" | "completed";
+  points?: number;
 }
 
 type TodoUpdateType = Pick<Todo, "id" | "title" | "desc" | "projectId"> & {
@@ -51,7 +53,7 @@ type TodoUpdateType = Pick<Todo, "id" | "title" | "desc" | "projectId"> & {
 
 export type NewTodoType = Pick<
   Todo,
-  "title" | "desc" | "projectId" | "deadline" | "status"
+  "title" | "desc" | "projectId" | "deadline" | "status" | "points"
 > & {
   userId: string;
 };
@@ -162,10 +164,12 @@ export const addNewTodo = createAsyncThunk(
         projectId: initialTodo.projectId,
         deadline: initialTodo.deadline,
         status: initialTodo.status,
+        points: initialTodo.points,
       }
     );
     // The response includes the complete post object, including unique ID
 
+    console.log("todosSlice, add NewTodo, 167, docRef.id", docRef.id);
     return {
       id: docRef.id,
       title: initialTodo.title,
@@ -173,14 +177,23 @@ export const addNewTodo = createAsyncThunk(
       projectId: initialTodo.projectId,
       deadline: initialTodo.deadline,
       status: initialTodo.status,
+      points: initialTodo.points,
     };
   }
 );
+
+//
 
 export const todosSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
+    /*todoAdded: (state, action: PayloadAction<Todo>) => {
+      console.log(
+        "todosSlice, CreateSlice,188, TODO ADDED called action.payload",
+        action.payload
+      );
+    },*/
     /* todoUpdated: (state, action: PayloadAction<Todo>) => {
       const todo = state.todos.find((todo) => todo.id === action.payload.id);
 
@@ -226,6 +239,8 @@ export const todosSlice = createSlice({
       .addCase(addNewTodo.fulfilled, (state, action) => {
         // We can directly add the new todo object to our todo array
         state.todos.push(action.payload as Todo);
+        /*  const dispatch = useAppDispatch();
+        dispatch(todoAdded(action.payload as Todo));*/
       })
       .addCase(updateTodoStatus.fulfilled, (state, action) => {
         const todoId = action.payload.todoId;
@@ -247,6 +262,8 @@ export const todosSlice = createSlice({
       });
   },
 });
+
+//export const { todoAdded } = todosSlice.actions;
 
 export const selectAllTodos = (state: RootState) => state.todos.todos;
 

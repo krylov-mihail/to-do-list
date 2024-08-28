@@ -10,11 +10,21 @@ import { DatePickerInput } from "react-native-paper-dates";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { selectUser } from "../user/userSlice";
+import {
+  addNewStats,
+  selectFutureStats,
+  selectTodayStats,
+  updateStats,
+} from "../stats/statsSlice";
 
 export const AddTodoForm = () => {
   const [inputTitle, setInputTitle] = React.useState("");
   const [inputDesc, setInputDesc] = React.useState("");
   const [inputProject, setInputProject] = React.useState("");
+  const [inputPoints, setInputPoints] = React.useState(3);
+  const [addRequestStatus, setAddRequestStatus] = React.useState<
+    "idle" | "pending"
+  >("idle");
 
   const [inputDeadline, setInputDeadline] = React.useState(new Date());
 
@@ -24,8 +34,10 @@ export const AddTodoForm = () => {
   const dispatch = useAppDispatch();
 
   const currentUser = useSelector(selectUser);
+  const todayStats = useAppSelector(selectTodayStats);
+  const futureStats = useAppSelector(selectFutureStats);
 
-  const handleSubmit = (e: GestureResponderEvent) => {
+  const handleSubmit = async (e: GestureResponderEvent) => {
     // Prevent server submission
     e.preventDefault();
 
@@ -40,12 +52,92 @@ export const AddTodoForm = () => {
       projectId: inputProject,
       deadline: new Date(endDate).toISOString(),
       status: "new",
+      points: inputPoints,
       userId: currentUser.user.uid,
     };
 
-    dispatch(addNewTodo(newTodo));
+    //try {
+    setAddRequestStatus("pending");
+    await dispatch(addNewTodo(newTodo));
+    console.log("AddTodoForm, 55 Todo added successfully");
+    // clear form
+    setInputTitle("");
+    setInputDesc("");
+    setInputProject("");
+    setInputDeadline(new Date());
+
+    // process stats information
+    const currentDateString = new Date().toISOString().slice(0, 10);
+    const todoDeadlineDate = newTodo.deadline.slice(0, 10);
+
+    console.log(
+      "addtodoform 67, currentDateString, todoDeadlineDate",
+      currentDateString,
+      todoDeadlineDate
+    );
+
+    var newTaskFlag = false;
+    var currentTaskData = null;
+
+    if (currentDateString == todoDeadlineDate) {
+      // todo was created for today
+      // check we already have data in stats
+      if (todayStats.length == 0) {
+        newTaskFlag = true;
+      } else {
+        currentTaskData = todayStats[0];
+      }
+    } else if (currentDateString < todoDeadlineDate) {
+      const FilteredData = futureStats.filter((stats) => {
+        stats.statsDate == todoDeadlineDate;
+      });
+
+      if (FilteredData.length == 0) {
+        newTaskFlag = true;
+      } else {
+        currentTaskData = FilteredData[0];
+      }
+    }
+
+    if (newTaskFlag) {
+      // we  will create a new stats
+
+      const NewStats = {
+        id: `stats_${todoDeadlineDate}`,
+        statsDate: todoDeadlineDate,
+        totalTaskCount: 1,
+        completedTaskCount: 0,
+        totalPoints: newTodo.points ? newTodo.points : 0,
+        completedPoints: 0,
+        userId: currentUser.user.uid,
+      };
+
+      dispatch(addNewStats(NewStats));
+    } else {
+      // we will update existing stats
+      const todoPoints = newTodo.points !== undefined ? newTodo.points : 0;
+
+      const UpdatedStats = {
+        id: `stats_${todoDeadlineDate}`,
+        statsDate: todoDeadlineDate,
+        totalTaskCount: todayStats[0].totalTaskCount + 1,
+        completedTaskCount: todayStats[0].completedTaskCount,
+        totalPoints: todayStats[0].totalPoints + todoPoints,
+        completedPoints: todayStats[0].completedPoints,
+        userId: currentUser.user.uid,
+      };
+
+      dispatch(updateStats(UpdatedStats));
+    }
 
     router.back();
+    /* } catch (err) {
+      console.error("Failed to save the todo: ", err);
+    } finally {
+      
+    }*/
+
+    setAddRequestStatus("idle");
   };
 
   return (
@@ -76,6 +168,20 @@ export const AddTodoForm = () => {
           onSelect={(text?: string) => {
             console.log(text);
             setInputProject(text as string);
+          }}
+        />
+
+        <Dropdown
+          label="Reward Points"
+          placeholder="Select Points"
+          options={[0, 1, 2, 3, 4, 5].map((point) => ({
+            label: `${point}`,
+            value: `${point}`,
+          }))}
+          value={`${inputPoints}`}
+          onSelect={(text?: string) => {
+            const numb = Number(text);
+            setInputPoints(numb as number);
           }}
         />
 

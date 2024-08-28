@@ -20,6 +20,7 @@ import {
   updateTodoStatus,
 } from "./todosSlice";
 import { selectUser } from "../user/userSlice";
+import PerformanceStats from "@/components/PerformanceStats";
 
 export const TodosList = () => {
   /*get todos from Redux*/
@@ -120,6 +121,9 @@ export const TodosList = () => {
     content = <Text>{todosError}</Text>;
   }
 
+  const dateString = new Date().toISOString().slice(0, 10);
+  const dateId = `stats_${dateString}`;
+
   return (
     <View>
       {/*<ToggleButton
@@ -128,6 +132,7 @@ export const TodosList = () => {
         status={multiMode as undefined & "checked" & "unchecked"}
         onPress={onButtonToggle}
       />*/}
+      <PerformanceStats dateId={dateId}></PerformanceStats>
       <List.Section>
         <List.Subheader>Tasks to complete</List.Subheader>
         {content}

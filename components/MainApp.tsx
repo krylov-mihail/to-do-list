@@ -15,6 +15,10 @@ import {
   selectTodosError,
   selectTodosStatus,
 } from "@/lib/features/todos/todosSlice";
+import {
+  fetchStatsForUser,
+  selectStatsStatus,
+} from "@/lib/features/stats/statsSlice";
 
 export default function MainApp() {
   // user is loaded ata loaded from the storage
@@ -48,6 +52,18 @@ export default function MainApp() {
       dispatch(fetchTodosByUser(currentUser.user.uid));
     }
   }, [todosStatus, dispatch]);
+
+  /* 3. Load  Stats from Firestore*/
+
+  const statsStatus = useAppSelector(selectStatsStatus);
+
+  // update todos if loading  status has changes
+  useEffect(() => {
+    if (todosStatus === "idle") {
+      // need to replace with real user id
+      dispatch(fetchStatsForUser(currentUser.user.uid));
+    }
+  }, [statsStatus, dispatch]);
 
   return (
     <Stack>
