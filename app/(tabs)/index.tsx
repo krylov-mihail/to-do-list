@@ -14,11 +14,11 @@ export default function Index() {
   let currentUser = useSelector(selectUser);
 
   const dispatch = useDispatch();
-
+  const curDate = new Date().toISOString().slice(0, 10);
   return (
     <SafeAreaView style={styles.container}>
       <Text>Welcome {currentUser.user.email}</Text>
-      <TodosList />
+      <TodosList renderDate={curDate} />
 
       <FABButton />
     </SafeAreaView>

@@ -40,7 +40,7 @@ export type StatsType = {
   completedPoints: number;
 };
 
-type StatsUpdateType = Pick<
+export type StatsUpdateType = Pick<
   StatsType,
   | "id"
   | "totalTaskCount"

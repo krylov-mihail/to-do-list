@@ -72,8 +72,6 @@ const theme = {
   },
 };
 import { adaptNavigationTheme } from "react-native-paper";
-import { selectUser } from "@/lib/features/user/userSlice";
-import { SafeAreaView } from "react-native";
 
 const { LightTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,

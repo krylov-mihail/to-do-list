@@ -6,7 +6,8 @@ import {
 import { useAppSelector } from "@/lib/hooks";
 import { PropsWithChildren } from "react";
 import { View } from "react-native";
-import { Title, Text } from "react-native-paper";
+import { Title, Text, Chip } from "react-native-paper";
+import DonutCharts from "./DonutCharts";
 
 export default function PerformanceStats({
   children,
@@ -27,23 +28,28 @@ export default function PerformanceStats({
 
   StatsData = lookUpStatsArr.find((stats) => stats.id === dateId);
 
+  //const performanceScore = StatsData?.score || 0;
+
   if (StatsData) {
+    var performanceStatus = "";
+    if (StatsData.totalTaskCount - StatsData.completedTaskCount > 0) {
+      performanceStatus = "Keep on working";
+    } else {
+      performanceStatus = "Well Done";
+    }
+
     return (
       <View>
-        <Title>Performance Stats</Title>
-        <Text>Performance stats for {dateId}</Text>
         <Text>
-          Tasks {StatsData.completedTaskCount} / {StatsData.totalTaskCount}
+          Your Performance: <Chip>{`${performanceStatus}`}</Chip>
         </Text>
-        <Text>
-          Points {StatsData.completedPoints} / {StatsData.totalPoints}
-        </Text>
+        <DonutCharts stats={StatsData} />
       </View>
     );
   } else {
     return (
       <View>
-        <Title>To see stats data add some tasks</Title>
+        <Title>Your Performance: Not yet started</Title>
       </View>
     );
   }

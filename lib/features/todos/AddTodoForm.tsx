@@ -16,6 +16,7 @@ import {
   selectTodayStats,
   updateStats,
 } from "../stats/statsSlice";
+import { useStats } from "@/lib/hooks/useStats";
 
 export const AddTodoForm = () => {
   const [inputTitle, setInputTitle] = React.useState("");
@@ -27,6 +28,8 @@ export const AddTodoForm = () => {
   >("idle");
 
   const [inputDeadline, setInputDeadline] = React.useState(new Date());
+
+  const { getStatsByDate } = useStats();
 
   const projects = useAppSelector(selectAllProjects);
 
@@ -70,66 +73,42 @@ export const AddTodoForm = () => {
     const currentDateString = new Date().toISOString().slice(0, 10);
     const todoDeadlineDate = newTodo.deadline.slice(0, 10);
 
-    console.log(
-      "addtodoform 67, currentDateString, todoDeadlineDate",
-      currentDateString,
-      todoDeadlineDate
-    );
+    var currentStatsData = getStatsByDate(todoDeadlineDate);
 
-    var newTaskFlag = false;
-    var currentTaskData = null;
+    if (currentDateString <= todoDeadlineDate) {
+      // we do not update historical stats
 
-    if (currentDateString == todoDeadlineDate) {
-      // todo was created for today
-      // check we already have data in stats
-      if (todayStats.length == 0) {
-        newTaskFlag = true;
+      if (currentStatsData === null) {
+        // we  will create a new stats
+
+        const NewStats = {
+          id: `stats_${todoDeadlineDate}`,
+          statsDate: todoDeadlineDate,
+          totalTaskCount: 1,
+          completedTaskCount: 0,
+          totalPoints: newTodo.points ? newTodo.points : 0,
+          completedPoints: 0,
+          userId: currentUser.user.uid,
+        };
+
+        dispatch(addNewStats(NewStats));
       } else {
-        currentTaskData = todayStats[0];
-      }
-    } else if (currentDateString < todoDeadlineDate) {
-      const FilteredData = futureStats.filter((stats) => {
-        stats.statsDate == todoDeadlineDate;
-      });
+        // we will update existing stats
+        const todoPoints = newTodo.points !== undefined ? newTodo.points : 0;
 
-      if (FilteredData.length == 0) {
-        newTaskFlag = true;
-      } else {
-        currentTaskData = FilteredData[0];
+        const UpdatedStats = {
+          id: `stats_${todoDeadlineDate}`,
+          statsDate: todoDeadlineDate,
+          totalTaskCount: currentStatsData.totalTaskCount + 1,
+          completedTaskCount: currentStatsData.completedTaskCount,
+          totalPoints: currentStatsData.totalPoints + todoPoints,
+          completedPoints: currentStatsData.completedPoints,
+          userId: currentUser.user.uid,
+        };
+
+        dispatch(updateStats(UpdatedStats));
       }
     }
-
-    if (newTaskFlag) {
-      // we  will create a new stats
-
-      const NewStats = {
-        id: `stats_${todoDeadlineDate}`,
-        statsDate: todoDeadlineDate,
-        totalTaskCount: 1,
-        completedTaskCount: 0,
-        totalPoints: newTodo.points ? newTodo.points : 0,
-        completedPoints: 0,
-        userId: currentUser.user.uid,
-      };
-
-      dispatch(addNewStats(NewStats));
-    } else {
-      // we will update existing stats
-      const todoPoints = newTodo.points !== undefined ? newTodo.points : 0;
-
-      const UpdatedStats = {
-        id: `stats_${todoDeadlineDate}`,
-        statsDate: todoDeadlineDate,
-        totalTaskCount: todayStats[0].totalTaskCount + 1,
-        completedTaskCount: todayStats[0].completedTaskCount,
-        totalPoints: todayStats[0].totalPoints + todoPoints,
-        completedPoints: todayStats[0].completedPoints,
-        userId: currentUser.user.uid,
-      };
-
-      dispatch(updateStats(UpdatedStats));
-    }
-
     router.back();
     /* } catch (err) {
       console.error("Failed to save the todo: ", err);
