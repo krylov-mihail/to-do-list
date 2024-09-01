@@ -1,14 +1,6 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
-import {
-  Checkbox,
-  IconButton,
-  List,
-  ActivityIndicator,
-  RadioButton,
-  ToggleButton,
-  Text,
-} from "react-native-paper";
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import { List, ActivityIndicator, Text } from "react-native-paper";
 
 import { Link } from "expo-router";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
@@ -23,7 +15,6 @@ import { selectUser } from "../user/userSlice";
 import PerformanceStats from "@/components/PerformanceStats";
 import { StatsUpdateType, updateStats } from "../stats/statsSlice";
 import { useStats } from "@/lib/hooks/useStats";
-import { OverdueTasks } from "@/components/OverdueTasks";
 import { TasksToDo } from "@/components/TasksToDo";
 
 type propsType = { renderDate: string };
@@ -45,8 +36,6 @@ export const TodosList = (props: propsType) => {
 
   // todo status update logic
   const updateStatus = async (todoId: string, status: "new" | "completed") => {
-    console.log("update status", { todoId, status });
-
     await dispatch(
       updateTodoStatus({
         todoId,
@@ -65,7 +54,6 @@ export const TodosList = (props: propsType) => {
       if (todoDeadlineDate >= currentDateString) {
         var currentStatsData = getStatsByDate(todoDeadlineDate);
 
-        console.log("todolist, 65 currentStatsData ", currentStatsData);
         if (currentStatsData) {
           var pointsToAdd = 0;
           if (todoData.points != undefined) {
@@ -95,8 +83,6 @@ export const TodosList = (props: propsType) => {
           };
 
           await dispatch(updateStats(updatedStatsData));
-
-          console.log("todolist, 89 stats updated", updatedStatsData);
         }
       }
     }
@@ -109,8 +95,6 @@ export const TodosList = (props: propsType) => {
   const onButtonToggle = () => {
     setmultiMode(multiMode === "checked" ? "unchecked" : "checked");
   };
-
-  var contentCurrent = null;
 
   const dateId = `stats_${renderDate}`;
 
@@ -158,62 +142,9 @@ export const TodosList = (props: propsType) => {
       );
     });
 
-    const renderedCurrentTodoList = todos.map(
-      (todo) =>
-        todo.status == "new" &&
-        todo.deadline == currentDateString && (
-          <Link key={todo.id} href={`/todo/${todo.id}`} asChild>
-            <List.Item
-              key={todo.id}
-              title={todo.title}
-              description={todo.desc.substring(0, 100)}
-              left={(props) => {
-                return multiMode == "checked" ? (
-                  <Checkbox
-                    {...props}
-                    status={
-                      checkedArr.includes(todo.id) ? "checked" : "unchecked"
-                    }
-                    onPress={() => {
-                      // if  we already have element in array => remove it
-                      // if we do no have it in array => remove it
-                      var newArr = checkedArr.includes(todo.id)
-                        ? checkedArr.filter((el) => el != todo.id)
-                        : [...checkedArr, todo.id];
-                      setCheckedArr(newArr);
-                    }}
-                  />
-                ) : (
-                  <RadioButton
-                    value={todo.id}
-                    status={
-                      todo.status == "completed" ? "checked" : "unchecked"
-                    }
-                    onPress={() => {
-                      updateStatus(
-                        todo.id,
-                        todo.status == "completed" ? "new" : "completed"
-                      );
-                    }}
-                  />
-                );
-              }}
-              right={(props) => (
-                <Link key={todo.id} href={`/todo/${todo.id}`} asChild>
-                  <IconButton
-                    {...props}
-                    icon="arrow-right-circle"
-                    mode="contained"
-                  />
-                </Link>
-              )}
-            />
-          </Link>
-        )
-    );
-    contentCurrent = renderedCurrentTodoList;
-
-    contentCurrent = renderedCurrentTodoList;
+    const showOverdue =
+      overdueTodos.length > 0 &&
+      currentDateString == new Date().toISOString().slice(0, 10);
 
     return (
       <View>
@@ -225,23 +156,29 @@ export const TodosList = (props: propsType) => {
         onPress={onButtonToggle}
       />*/}
         <PerformanceStats dateId={dateId}></PerformanceStats>
+        {showOverdue && (
+          <List.Section style={style.offset}>
+            <List.Accordion
+              title={`Overdue ${overdueTodos.length} tasks`}
+              left={(props) => <List.Icon {...props} icon="alert-box" />}
+            >
+              <TasksToDo
+                status="overdue"
+                multimode={multiMode}
+                checkedArr={checkedArr}
+                tasks={overdueTodos}
+                setCheckedArr={setCheckedArr}
+                updateStatus={updateStatus}
+              />
+            </List.Accordion>
+          </List.Section>
+        )}
+        {(currentTodos.length > 0 || completedTodos.length > 0) && (
+          <Text variant="titleMedium" style={style.offset}>
+            Tasks
+          </Text>
+        )}
         <List.Section>
-          <List.Accordion
-            title={`Overdue ${overdueTodos.length} tasks`}
-            left={(props) => <List.Icon {...props} icon="alert-box" />}
-          >
-            <TasksToDo
-              status="new"
-              multimode={multiMode}
-              checkedArr={checkedArr}
-              tasks={overdueTodos}
-              setCheckedArr={setCheckedArr}
-              updateStatus={updateStatus}
-            />
-          </List.Accordion>
-        </List.Section>
-        <List.Section>
-          <List.Subheader>Current tasks</List.Subheader>
           <TasksToDo
             status="new"
             multimode={multiMode}
@@ -264,3 +201,9 @@ export const TodosList = (props: propsType) => {
     );
   }
 };
+
+const style = StyleSheet.create({
+  offset: {
+    paddingTop: 10,
+  },
+});

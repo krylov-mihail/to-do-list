@@ -1,4 +1,4 @@
-import { SafeAreaView, Text, StyleSheet } from "react-native";
+import { SafeAreaView, Text, StyleSheet, View, ScrollView } from "react-native";
 import { TodosList } from "@/lib/features/todos/todosList";
 
 import * as React from "react";
@@ -10,16 +10,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { FABButton } from "@/components/FABButton";
 
 export default function Index() {
-  let dataLoaded = useSelector(getLoadState);
   let currentUser = useSelector(selectUser);
 
-  const dispatch = useDispatch();
   const curDate = new Date().toISOString().slice(0, 10);
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Welcome {currentUser.user.email}</Text>
-      <TodosList renderDate={curDate} />
-
+      <ScrollView>
+        <TodosList renderDate={curDate} />
+      </ScrollView>
       <FABButton />
     </SafeAreaView>
   );

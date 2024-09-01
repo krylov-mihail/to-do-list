@@ -12,7 +12,7 @@ import {
 
 type PropsType = {
   tasks: Array<Todo>;
-  status: ToDoStatusType;
+  status: ToDoStatusType | "overdue";
   multimode: string;
   checkedArr: Array<string>;
   setCheckedArr: (arr: Array<string>) => void;
@@ -42,6 +42,22 @@ export const TasksToDo = (props: PropsType) => {
         }}
         description={todo.desc.substring(0, 100)}
         left={(props) => {
+          if (status == "overdue") {
+            return (
+              <Link
+                key={todo.id}
+                href={`/todo/overdue?slug=${todo.id}`}
+                asChild
+              >
+                <IconButton
+                  {...props}
+                  icon="clock-edit-outline"
+                  mode="contained"
+                />
+              </Link>
+            );
+          }
+
           return multimode == "checked" ? (
             <Checkbox
               {...props}

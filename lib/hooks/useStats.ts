@@ -1,14 +1,62 @@
-import { useAppSelector } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
+  addNewStats,
   selectFutureStats,
   selectHistoryStats,
   selectTodayStats,
+  updateStats,
 } from "../features/stats/statsSlice";
+import { useSelector } from "react-redux";
+import { selectUser } from "../features/user/userSlice";
 
 export const useStats = () => {
   const todayStats = useAppSelector(selectTodayStats);
   const futureStats = useAppSelector(selectFutureStats);
   const historyStats = useAppSelector(selectHistoryStats);
+  const currentUser = useSelector(selectUser);
+  const dispatch = useAppDispatch();
+
+  const updateStatsByDate = (newTodo: { deadline: string; points: number }) => {
+    const currentDateString = new Date().toISOString().slice(0, 10);
+    const todoDeadlineDate = newTodo.deadline.slice(0, 10);
+
+    var currentStatsData = getStatsByDate(todoDeadlineDate);
+
+    if (currentDateString <= todoDeadlineDate) {
+      // we do not update historical stats
+
+      if (currentStatsData === null) {
+        // we  will create a new stats
+
+        const NewStats = {
+          id: `stats_${todoDeadlineDate}`,
+          statsDate: todoDeadlineDate,
+          totalTaskCount: 1,
+          completedTaskCount: 0,
+          totalPoints: newTodo.points ? newTodo.points : 0,
+          completedPoints: 0,
+          userId: currentUser.user.uid,
+        };
+
+        dispatch(addNewStats(NewStats));
+      } else {
+        // we will update existing stats
+        const todoPoints = newTodo.points !== undefined ? newTodo.points : 0;
+
+        const UpdatedStats = {
+          id: `stats_${todoDeadlineDate}`,
+          statsDate: todoDeadlineDate,
+          totalTaskCount: currentStatsData.totalTaskCount + 1,
+          completedTaskCount: currentStatsData.completedTaskCount,
+          totalPoints: currentStatsData.totalPoints + todoPoints,
+          completedPoints: currentStatsData.completedPoints,
+          userId: currentUser.user.uid,
+        };
+
+        dispatch(updateStats(UpdatedStats));
+      }
+    }
+  };
 
   const getStatsByDate = (statsDate: string) => {
     const currentDateString = new Date().toISOString().slice(0, 10);
@@ -41,5 +89,5 @@ export const useStats = () => {
     return currentTaskData;
   };
 
-  return { getStatsByDate };
+  return { getStatsByDate, updateStatsByDate };
 };

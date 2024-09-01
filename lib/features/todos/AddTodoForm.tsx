@@ -29,7 +29,7 @@ export const AddTodoForm = () => {
 
   const [inputDeadline, setInputDeadline] = React.useState(new Date());
 
-  const { getStatsByDate } = useStats();
+  const { updateStatsByDate } = useStats();
 
   const projects = useAppSelector(selectAllProjects);
 
@@ -70,45 +70,11 @@ export const AddTodoForm = () => {
     setInputDeadline(new Date());
 
     // process stats information
-    const currentDateString = new Date().toISOString().slice(0, 10);
-    const todoDeadlineDate = newTodo.deadline.slice(0, 10);
+    updateStatsByDate({
+      deadline: newTodo.deadline,
+      points: newTodo.points as number,
+    });
 
-    var currentStatsData = getStatsByDate(todoDeadlineDate);
-
-    if (currentDateString <= todoDeadlineDate) {
-      // we do not update historical stats
-
-      if (currentStatsData === null) {
-        // we  will create a new stats
-
-        const NewStats = {
-          id: `stats_${todoDeadlineDate}`,
-          statsDate: todoDeadlineDate,
-          totalTaskCount: 1,
-          completedTaskCount: 0,
-          totalPoints: newTodo.points ? newTodo.points : 0,
-          completedPoints: 0,
-          userId: currentUser.user.uid,
-        };
-
-        dispatch(addNewStats(NewStats));
-      } else {
-        // we will update existing stats
-        const todoPoints = newTodo.points !== undefined ? newTodo.points : 0;
-
-        const UpdatedStats = {
-          id: `stats_${todoDeadlineDate}`,
-          statsDate: todoDeadlineDate,
-          totalTaskCount: currentStatsData.totalTaskCount + 1,
-          completedTaskCount: currentStatsData.completedTaskCount,
-          totalPoints: currentStatsData.totalPoints + todoPoints,
-          completedPoints: currentStatsData.completedPoints,
-          userId: currentUser.user.uid,
-        };
-
-        dispatch(updateStats(UpdatedStats));
-      }
-    }
     router.back();
     /* } catch (err) {
       console.error("Failed to save the todo: ", err);
@@ -169,7 +135,10 @@ export const AddTodoForm = () => {
             locale="en-GB"
             label="Deadline"
             value={inputDeadline}
-            onChange={(d) => setInputDeadline(d as Date)}
+            onChange={(d) => {
+              console.log("d", d);
+              setInputDeadline(d as Date);
+            }}
             inputMode="start"
           />
         </View>
