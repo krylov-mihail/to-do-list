@@ -31,6 +31,7 @@ export const addNewUser = createAsyncThunk(
     console.log("-----------", "initial User", initialUser);
     await setDoc(doc(db, "users", `user_${initialUser.id}`), {
       email: initialUser.email,
+      points: 0,
     });
 
     // The response includes the complete post object, including unique ID

@@ -30,7 +30,7 @@ export type NewProjectType = Pick<Project, "title" | "desc"> & {
 };
 
 export const fetchProjectsForUser = createAsyncThunk(
-  "todos/fetchProjects",
+  "projects/fetchProjects",
   async (userId: string) => {
     const items = await getProjects(db, userId);
 

@@ -19,6 +19,10 @@ import {
   fetchStatsForUser,
   selectStatsStatus,
 } from "@/lib/features/stats/statsSlice";
+import {
+  fetchRewardsForUser,
+  selectRewardsLoadStatus,
+} from "@/lib/features/rewards/rewardsSlice";
 
 export default function MainApp() {
   // user is loaded ata loaded from the storage
@@ -64,6 +68,18 @@ export default function MainApp() {
       dispatch(fetchStatsForUser(currentUser.user.uid));
     }
   }, [statsStatus, dispatch]);
+
+  /* 4.Load Rewards From Fire store*/
+  /*monitore loading status as we make a async request behind the scene */
+  const rewardsStatus = useAppSelector(selectRewardsLoadStatus);
+
+  // update todos if loading  status has changes
+  useEffect(() => {
+    if (rewardsStatus === "idle") {
+      // need to replace with real user id
+      dispatch(fetchRewardsForUser(currentUser.user.uid));
+    }
+  }, [rewardsStatus, dispatch]);
 
   return (
     <Stack>

@@ -21,10 +21,10 @@ export default function Page() {
           left={(props) => <List.Icon {...props} icon="folder" />}
         />
       </Link>
-      <Link href="/achivements" asChild>
+      <Link href="/rewards" asChild>
         <List.Item
-          title="Achievements"
-          description="View your results"
+          title="Rewards"
+          description="Manage rewards"
           left={(props) => <List.Icon {...props} icon="trophy" />}
         />
       </Link>
