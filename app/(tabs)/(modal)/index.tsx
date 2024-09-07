@@ -1,7 +1,5 @@
 import { HowToBlock } from "@/components/Help";
-import { Link } from "expo-router";
-import { View, Text } from "react-native";
-import { Button, IconButton } from "react-native-paper";
+import { View } from "react-native";
 
 export default function HowTo() {
   return (

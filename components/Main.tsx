@@ -4,12 +4,10 @@ import {
   selectUser,
   updateLoadState,
 } from "@/lib/features/user/userSlice";
-import { Stack } from "expo-router";
+
 import { SafeAreaView } from "react-native";
 import { useSelector } from "react-redux";
 import Login from "./Login";
-import { store } from "@/lib/store";
-import { fetchProjectsForUser } from "@/lib/features/projects/projectsSlice";
 import { useEffect } from "react";
 import { ActivityIndicator } from "react-native-paper";
 import { onAuthStateChanged } from "firebase/auth";
@@ -34,7 +32,6 @@ export default function Main() {
         const uid = user.uid;
         // dispatch(login({ user: user }));
         // ...
-        console.log("Main.tsx line 34: signed in");
 
         if (!currentUser) {
           dispatch(
@@ -53,8 +50,6 @@ export default function Main() {
       } else {
         // User is signed out
         // ...
-
-        console.log("Main.tsx line 34: signed out");
       }
     });
     return unsubscribe;

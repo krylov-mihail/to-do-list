@@ -1,22 +1,16 @@
 import React, { ReactNode } from "react";
 
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
-import {
-  addNewTodo,
-  selectTodoById,
-  updateTodo,
-  updateTodoStatus,
-} from "./todosSlice";
+import { addNewTodo, selectTodoById, updateTodoStatus } from "./todosSlice";
 import {
   GestureResponderEvent,
   ScrollView,
   View,
   StyleSheet,
 } from "react-native";
-import { Button, TextInput, Title, Text } from "react-native-paper";
+import { Button, Title } from "react-native-paper";
 import { router } from "expo-router";
 import { Dropdown } from "react-native-paper-dropdown";
-import { selectAllProjects } from "../projects/projectsSlice";
 import { useSelector } from "react-redux";
 import { selectUser } from "../user/userSlice";
 import { DatePickerInput } from "react-native-paper-dates";
@@ -147,7 +141,6 @@ export const OverdueTodoForm = (props: OverdueTodoFormType) => {
           }))}
           value={inputReason}
           onSelect={(text?: string) => {
-            console.log(text);
             setInputReason(text as string);
           }}
         />

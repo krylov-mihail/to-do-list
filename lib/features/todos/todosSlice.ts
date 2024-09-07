@@ -1,5 +1,5 @@
 import { RootState } from "@/lib/store";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 // import { sub, add } from "date-fns";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { app as FirebaseApp } from "@/firebase.Config";
@@ -13,7 +13,6 @@ import {
   doc,
 } from "firebase/firestore/lite";
 import { logout } from "../user/userSlice";
-import { useAppDispatch } from "@/lib/hooks";
 
 const db = getFirestore(FirebaseApp);
 
@@ -169,7 +168,6 @@ export const addNewTodo = createAsyncThunk(
     );
     // The response includes the complete post object, including unique ID
 
-    console.log("todosSlice, add NewTodo, 167, docRef.id", docRef.id);
     return {
       id: docRef.id,
       title: initialTodo.title,
@@ -229,7 +227,6 @@ export const todosSlice = createSlice({
       .addCase(fetchTodosByUser.fulfilled, (state, action) => {
         state.status = "succeeded";
         // Add any fetched todos to the array
-        console.log("todosSlice, 163, action.payload", action.payload);
         state.todos.push(...action.payload);
       })
       .addCase(fetchTodosByUser.rejected, (state, action) => {

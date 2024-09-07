@@ -1,7 +1,7 @@
 import * as React from "react";
 import { auth } from "../firebase.Config.js";
 
-import { Button, TextInput } from "react-native-paper";
+import { Button } from "react-native-paper";
 
 import { logout } from "@/lib/features/user/userSlice";
 
@@ -16,7 +16,6 @@ export default function Logout() {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-        console.log("signedOut");
         dispatch(logout());
       })
       .catch((error) => {

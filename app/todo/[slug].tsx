@@ -1,5 +1,5 @@
 import { Link, router, useLocalSearchParams } from "expo-router";
-import { Platform, Text, View } from "react-native";
+import { Platform, View } from "react-native";
 import { SingleTodo } from "@/lib/features/todos/SingleTodo";
 import { StatusBar } from "expo-status-bar";
 

@@ -2,7 +2,6 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { List, ActivityIndicator, Text } from "react-native-paper";
 
-import { Link } from "expo-router";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
 import {

@@ -3,15 +3,9 @@ import { View } from "react-native";
 import { Button, TextInput, Title } from "react-native-paper";
 import { GestureResponderEvent } from "react-native";
 
-import { nanoid } from "@reduxjs/toolkit";
 import { useAppDispatch } from "@/lib/hooks";
 
-import {
-  NewProjectType,
-  type Project,
-  addNewProject,
-  addProject,
-} from "./projectsSlice";
+import { NewProjectType, addNewProject } from "./projectsSlice";
 import { selectUser } from "../user/userSlice";
 import { useSelector } from "react-redux";
 
@@ -34,8 +28,6 @@ export const AddProjectForm = () => {
 
   let currentUser = useSelector(selectUser);
 
-  console.log("currentUser", currentUser);
-
   // Create the post object and dispatch the `postAdded` action
   const newProject: NewProjectType = {
     title: inputTitle,
@@ -47,7 +39,6 @@ export const AddProjectForm = () => {
     // Prevent server submission
     e.preventDefault();
 
-    console.log("Values: ", { inputTitle, inputDesc });
     dispatch(addNewProject(newProject));
   };
 

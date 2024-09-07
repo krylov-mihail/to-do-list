@@ -1,4 +1,4 @@
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import { store } from "@/lib/store";
 import {
   MD3LightTheme as DefaultTheme,

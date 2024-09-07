@@ -1,12 +1,10 @@
 import { Todo, ToDoStatusType } from "@/lib/features/todos/todosSlice";
 import { Link } from "expo-router";
-import { View } from "react-native";
 import {
   Checkbox,
   IconButton,
   List,
   RadioButton,
-  Title,
   Text,
   Button,
 } from "react-native-paper";

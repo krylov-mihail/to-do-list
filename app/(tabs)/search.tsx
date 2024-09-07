@@ -1,7 +1,6 @@
 import { FABButton } from "@/components/FABButton";
 import { TodosList } from "@/lib/features/todos/todosList";
 import React from "react";
-import { useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 import { DatePickerInput } from "react-native-paper-dates";

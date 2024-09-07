@@ -1,11 +1,9 @@
 import { SafeAreaView, Text, StyleSheet, View, ScrollView } from "react-native";
-import { TodosList } from "@/lib/features/todos/todosList";
-
 import * as React from "react";
 
-import { selectUser, getLoadState } from "@/lib/features/user/userSlice";
+import { selectUser } from "@/lib/features/user/userSlice";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function Index() {
   let currentUser = useSelector(selectUser);

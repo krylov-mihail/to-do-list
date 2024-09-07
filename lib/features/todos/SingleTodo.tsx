@@ -1,24 +1,8 @@
 import { useAppSelector } from "@/lib/hooks";
 import { router } from "expo-router";
-import { ComponentProps, JSX, ReactNode, RefAttributes } from "react";
-import {
-  StyleProp,
-  View,
-  ViewProps,
-  ViewStyle,
-  StyleSheet,
-} from "react-native";
-import {
-  Avatar,
-  Button,
-  Card,
-  Text,
-  AvatarIconProps,
-  Title,
-  Chip,
-} from "react-native-paper";
-import { IconSource } from "react-native-paper/lib/typescript/components/Icon";
-import { ThemeProp } from "react-native-paper/lib/typescript/types";
+import { ReactNode } from "react";
+import { View, StyleSheet } from "react-native";
+import { Avatar, Button, Card, Text, Title, Chip } from "react-native-paper";
 import { selectTodoById } from "./todosSlice";
 import { selectProjectById } from "../projects/projectsSlice";
 import { TimeSpan } from "@/components/TimeSpan";

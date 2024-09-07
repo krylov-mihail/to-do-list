@@ -3,15 +3,9 @@ import { View } from "react-native";
 import { Button, TextInput, Title } from "react-native-paper";
 import { GestureResponderEvent } from "react-native";
 
-import { nanoid } from "@reduxjs/toolkit";
 import { useAppDispatch } from "@/lib/hooks";
 
-import {
-  NewRewardType,
-  type RewardType,
-  addNewReward,
-  addReward,
-} from "./rewardsSlice";
+import { NewRewardType, addNewReward } from "./rewardsSlice";
 import { selectUser } from "../user/userSlice";
 import { useSelector } from "react-redux";
 

@@ -8,8 +8,6 @@ import {
   updatePointsBalance,
 } from "@/lib/features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { RootState } from "@/lib/store";
-import { Link } from "expo-router";
 import { Icon, List, Text, IconButton } from "react-native-paper";
 import { useSelector } from "react-redux";
 
@@ -43,7 +41,6 @@ export const UnclaimedReward = () => {
 
   const renderedRewardList = notClaimedReward.map((stats) => {
     let points = Math.ceil((stats.completedPoints * 10) / stats.totalPoints);
-    console.log(points, stats.completedPoints, stats.totalPoints);
     return (
       <List.Item
         key={stats.id}

@@ -5,12 +5,7 @@ import { auth } from "@/firebase.Config.js";
 import { Avatar, Button, Card, TextInput } from "react-native-paper";
 import { Text, View } from "react-native";
 
-import {
-  login,
-  selectUser,
-  getLoadState,
-  addNewUser,
-} from "@/lib/features/user/userSlice";
+import { login, getLoadState, addNewUser } from "@/lib/features/user/userSlice";
 
 import { useSelector } from "react-redux";
 
@@ -59,8 +54,6 @@ export default function Login() {
     signInWithEmailAndPassword(auth, username.value, pswd.value)
       .then((userCredential) => {
         // Signed in
-        console.log(userCredential.user);
-
         dispatch(
           login({
             user: {

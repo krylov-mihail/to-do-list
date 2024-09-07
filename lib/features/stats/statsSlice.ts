@@ -1,6 +1,5 @@
 import { RootState } from "@/lib/store";
 import { createSlice } from "@reduxjs/toolkit";
-import { sub, add } from "date-fns";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { app as FirebaseApp } from "@/firebase.Config";
 import {
@@ -8,12 +7,10 @@ import {
   collection,
   getDocs,
   Firestore,
-  addDoc,
   setDoc,
   doc,
 } from "firebase/firestore/lite";
 import { logout } from "../user/userSlice";
-import { addNewTodo } from "../todos/todosSlice";
 
 const db = getFirestore(FirebaseApp);
 
@@ -133,10 +130,7 @@ export const updateStats = createAsyncThunk(
   async (initialStatsData: StatsUpdateType) => {
     // We send the initial data to the firestore
     const id = `stats_${initialStatsData.statsDate}`;
-    console.log(
-      "statsSlice, updateStats, 132, initialStatsData",
-      initialStatsData
-    );
+
     const docRef = await setDoc(
       doc(db, `users/user_${initialStatsData.userId}/stats`, id),
       {
@@ -167,8 +161,6 @@ export const claimReward = createAsyncThunk(
     // We send the initial data to the firestore
     const id = statsData.id;
 
-    console.log("statsSlice 170", `users/user_${statsData.userId}/stats`, id);
-
     const docRef = await setDoc(
       doc(db, `users/user_${statsData.userId}/stats`, id),
       {
@@ -192,10 +184,6 @@ export const addNewStats = createAsyncThunk(
     // We send the initial data to the firestore
 
     const id = `stats_${initialStatsData.statsDate}`;
-    console.log(
-      "statsSlice, addNewStats, 157, initialStatsData",
-      initialStatsData
-    );
 
     const docRef = await setDoc(
       doc(db, `users/user_${initialStatsData.userId}/stats`, id),
@@ -238,7 +226,7 @@ export const statsSlice = createSlice({
       .addCase(fetchStatsForUser.fulfilled, (state, action) => {
         state.status = "succeeded";
         // Add any fetched todos to the array
-        console.log("statsSlice, 185, action.payload", action.payload);
+
         const currentDateString = new Date().toISOString().slice(0, 10);
         const historyStats = action.payload.filter(
           (stat) => stat.statsDate < currentDateString

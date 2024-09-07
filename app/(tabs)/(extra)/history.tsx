@@ -15,8 +15,6 @@ export default function Page() {
   const currentUser = useAppSelector(selectUser);
 
   const updateStatus = (todoId: string, status: ToDoStatusType) => {
-    console.log("update status", { todoId, status });
-
     dispatch(
       updateTodoStatus({
         todoId,

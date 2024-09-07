@@ -10,12 +10,7 @@ import { DatePickerInput } from "react-native-paper-dates";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { selectUser } from "../user/userSlice";
-import {
-  addNewStats,
-  selectFutureStats,
-  selectTodayStats,
-  updateStats,
-} from "../stats/statsSlice";
+import { selectFutureStats, selectTodayStats } from "../stats/statsSlice";
 import { useStats } from "@/lib/hooks/useStats";
 
 import { StyleSheet } from "react-native";
@@ -64,7 +59,6 @@ export const AddTodoForm = () => {
     //try {
     setAddRequestStatus("pending");
     await dispatch(addNewTodo(newTodo));
-    console.log("AddTodoForm, 55 Todo added successfully");
     // clear form
     setInputTitle("");
     setInputDesc("");
@@ -113,7 +107,6 @@ export const AddTodoForm = () => {
           }))}
           value={inputProject}
           onSelect={(text?: string) => {
-            console.log(text);
             setInputProject(text as string);
           }}
         />
@@ -138,7 +131,6 @@ export const AddTodoForm = () => {
             label="Deadline"
             value={inputDeadline}
             onChange={(d) => {
-              console.log("d", d);
               setInputDeadline(d as Date);
             }}
             inputMode="start"

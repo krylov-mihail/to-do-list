@@ -1,4 +1,4 @@
-import Svg, { Circle, Rect, SvgProps, G } from "react-native-svg";
+import Svg, { Circle, G } from "react-native-svg";
 import { View, Text, StyleSheet } from "react-native";
 import { useTheme } from "react-native-paper";
 

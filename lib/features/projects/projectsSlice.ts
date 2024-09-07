@@ -74,9 +74,6 @@ export const addNewProject = createAsyncThunk(
 );
 
 const getProjects = async (db: Firestore, userId: string) => {
-  console.log(
-    `file projectSlice, line 77, fetching user projects, userId =${userId}, url = users/user_${userId}/projects`
-  );
   const projectsCol = collection(db, `users/user_${userId}/projects`);
   const projectsSnapshot = await getDocs(projectsCol);
   const projectsList = projectsSnapshot.docs.map((doc) => {
@@ -84,7 +81,6 @@ const getProjects = async (db: Firestore, userId: string) => {
     data.id = doc.id;
     return data;
   });
-  console.log("projectSlice,87, response from Firestore", projectsList);
   return projectsList;
 };
 

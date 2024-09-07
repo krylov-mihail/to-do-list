@@ -4,19 +4,16 @@ import {
   selectUser,
 } from "@/lib/features/user/userSlice";
 import { Stack } from "expo-router";
-import { SafeAreaView } from "react-native";
 import { useSelector } from "react-redux";
 
 import {
   fetchProjectsForUser,
-  selectProjectsLoadError,
   selectProjectsLoadStatus,
 } from "@/lib/features/projects/projectsSlice";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
   fetchTodosByUser,
-  selectTodosError,
   selectTodosStatus,
 } from "@/lib/features/todos/todosSlice";
 import {

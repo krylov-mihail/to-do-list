@@ -1,9 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // make alias for greater readability
-import { User as FirebaseUser } from "firebase/auth";
 import {
-  addDoc,
-  collection,
   doc,
   Firestore,
   getDoc,
@@ -49,15 +46,13 @@ export const addNewUser = createAsyncThunk(
   async (initialUser: NewUser) => {
     // We send the initial data to the firestore
     // const response = await client.post<Post>("/fakeApi/posts", initialPost);
-    console.log("-----------", "initial User", initialUser);
+
     await setDoc(doc(db, "users", `user_${initialUser.id}`), {
       email: initialUser.email,
       points: 0,
     });
 
     // The response includes the complete post object, including unique ID
-
-    console.log("user_id", initialUser.id);
 
     return {
       id: initialUser.id,
@@ -70,8 +65,6 @@ export const fetchDataForUser = createAsyncThunk(
   "users/fetchData",
   async (userId: string) => {
     const item = await getData(db, userId);
-
-    console.log(item);
 
     return item as { points: number };
   },
@@ -93,13 +86,11 @@ const getData = async (db: Firestore, userId: string) => {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
     var data = docSnap.data();
     data.id = docSnap.id;
     return data;
   } else {
     // docSnap.data() will be undefined in this case
-    console.log("No such document!");
     return null;
   }
 };
@@ -111,7 +102,6 @@ export const updatePointsBalance = createAsyncThunk(
     // We send the initial data to the firestore
     const id = rewardData.points;
 
-    console.log("usersSlice 55", `users`, `user_${rewardData.userId}`);
     // get current points
 
     const docRef = await setDoc(
@@ -139,7 +129,6 @@ export const userSlice = createSlice({
   },
   reducers: {
     login: (state, action) => {
-      console.log(action);
       state.user = action.payload;
     },
     logout: (state) => {

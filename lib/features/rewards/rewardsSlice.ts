@@ -56,15 +56,6 @@ export const addNewReward = createAsyncThunk(
   async (initialReward: NewRewardType) => {
     // We send the initial data to the firestore
 
-    console.log(
-      "reward slice addNewReward 59, data",
-      {
-        title: initialReward.title,
-        desc: initialReward.desc,
-        price: initialReward.price,
-      },
-      `users/user_${initialReward.userId}/rewards`
-    );
     const docRef = await addDoc(
       collection(db, `users/user_${initialReward.userId}/rewards`),
       {
@@ -85,9 +76,6 @@ export const addNewReward = createAsyncThunk(
 );
 
 const getRewards = async (db: Firestore, userId: string) => {
-  console.log(
-    `file rewardSlice, line 79, fetching awailable rewards, userId =${userId}, url = users/user_${userId}/rewards`
-  );
   const rewardsCol = collection(db, `users/user_${userId}/rewards`);
   const rewardsSnapshot = await getDocs(rewardsCol);
   const rewardsList = rewardsSnapshot.docs.map((doc) => {
@@ -95,7 +83,7 @@ const getRewards = async (db: Firestore, userId: string) => {
     data.id = doc.id;
     return data;
   });
-  console.log("rewardsSlice,88, response from Firestore", rewardsList);
+
   return rewardsList;
 };
 

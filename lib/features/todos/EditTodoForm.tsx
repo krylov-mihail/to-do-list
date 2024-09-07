@@ -89,7 +89,6 @@ export const EditTodoForm = (props: EditTodoForm) => {
           }))}
           value={inputProject}
           onSelect={(text?: string) => {
-            console.log(text);
             setInputProject(text as string);
           }}
         />

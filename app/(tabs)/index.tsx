@@ -1,11 +1,11 @@
-import { SafeAreaView, Text, StyleSheet, View, ScrollView } from "react-native";
+import { SafeAreaView, StyleSheet, ScrollView } from "react-native";
 import { TodosList } from "@/lib/features/todos/todosList";
 
 import * as React from "react";
 
-import { selectUser, getLoadState } from "@/lib/features/user/userSlice";
+import { selectUser } from "@/lib/features/user/userSlice";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { FABButton } from "@/components/FABButton";
 
