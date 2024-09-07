@@ -5,9 +5,8 @@ import {
 } from "@/lib/features/todos/todosSlice";
 import { selectUser } from "@/lib/features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { List, RadioButton } from "react-native-paper";
-import { useDispatch } from "react-redux";
 
 export default function Page() {
   const todos = useAppSelector(selectAllTodos);
@@ -52,12 +51,20 @@ export default function Page() {
   });
 
   return (
-    <View>
-      <List.Section>
-        <List.Subheader>Completed Todos</List.Subheader>
-        {renderedTodoList}
-      </List.Section>
-      <View></View>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <List.Section>
+          <List.Subheader>Completed Todos</List.Subheader>
+          {renderedTodoList}
+        </List.Section>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    padding: 8,
+  },
+});

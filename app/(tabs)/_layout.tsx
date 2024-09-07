@@ -1,21 +1,21 @@
-import { Tabs } from "expo-router";
+import { Link, router, Tabs } from "expo-router";
 import React from "react";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 
-import { Drawer as PaperDrawer, Text } from "react-native-paper";
+import { IconButton, Drawer as PaperDrawer, Text } from "react-native-paper";
 
 const SideMenu = () => {
   return (
-    <>
-      <PaperDrawer.CollapsedItem
-        focusedIcon="inbox"
-        unfocusedIcon="inbox-outline"
-        label="Inbox"
-      />
-    </>
+    <IconButton
+      icon="help-circle"
+      size={24}
+      onPress={() => {
+        router.push("/(tabs)/(modal)");
+      }}
+    />
   );
 };
 
@@ -32,7 +32,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "Today",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "home" : "home-outline"}
@@ -45,7 +45,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="search"
         options={{
-          title: "Search",
+          title: "By date",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "search-sharp" : "search-outline"}
@@ -55,26 +55,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="history"
+        name="rewards"
         options={{
-          title: "History",
+          title: "Reward",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "file-tray-full-sharp" : "file-tray-full-outline"}
-              color={color}
-            />
-          ),
-        }}
-      />
-
-      <Tabs.Screen
-        name="explore"
-        options={{
-          href: null,
-          title: "Explore",
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
+              name={focused ? "trophy-sharp" : "trophy-outline"}
               color={color}
             />
           ),
@@ -83,7 +69,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(extra)"
         options={{
-          title: "Overview",
+          title: "Info",
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
@@ -91,6 +77,14 @@ export default function TabLayout() {
               color={color}
             />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="(modal)"
+        options={{
+          title: "Help me",
+          headerShown: false,
+          href: null,
         }}
       />
     </Tabs>

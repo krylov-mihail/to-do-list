@@ -18,6 +18,8 @@ import {
 } from "../stats/statsSlice";
 import { useStats } from "@/lib/hooks/useStats";
 
+import { StyleSheet } from "react-native";
+
 export const AddTodoForm = () => {
   const [inputTitle, setInputTitle] = React.useState("");
   const [inputDesc, setInputDesc] = React.useState("");
@@ -86,7 +88,7 @@ export const AddTodoForm = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <View>
         <Title>Add a New Todo</Title>
 
@@ -154,3 +156,11 @@ export const AddTodoForm = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    padding: 20,
+  },
+});

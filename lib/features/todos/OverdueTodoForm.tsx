@@ -7,7 +7,12 @@ import {
   updateTodo,
   updateTodoStatus,
 } from "./todosSlice";
-import { GestureResponderEvent, View } from "react-native";
+import {
+  GestureResponderEvent,
+  ScrollView,
+  View,
+  StyleSheet,
+} from "react-native";
 import { Button, TextInput, Title, Text } from "react-native-paper";
 import { router } from "expo-router";
 import { Dropdown } from "react-native-paper-dropdown";
@@ -17,6 +22,7 @@ import { selectUser } from "../user/userSlice";
 import { DatePickerInput } from "react-native-paper-dates";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useStats } from "@/lib/hooks/useStats";
+import { ThemedText } from "@/components/ThemedText";
 
 // omit form element types
 
@@ -121,15 +127,16 @@ export const OverdueTodoForm = (props: OverdueTodoFormType) => {
   };
 
   return (
-    <SafeAreaView>
-      <View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
         <Title>Handle Overdue Todo</Title>
-        <Text>
-          {" "}
+        <ThemedText>
           This task is overdue You can either close it or move it to different
-          date{" "}
-        </Text>
-        <Text> Either way the task will not give you reward points </Text>
+          date
+        </ThemedText>
+        <ThemedText>
+          Either way the task will not give you reward points
+        </ThemedText>
 
         <Dropdown
           label="Reason"
@@ -153,7 +160,12 @@ export const OverdueTodoForm = (props: OverdueTodoFormType) => {
         >
           Close task
         </Button>
-        <Text>Or move task to date</Text>
+
+        <ThemedText
+          style={{ marginTop: 15, marginBottom: 15, textAlign: "center" }}
+        >
+          Or move task to date
+        </ThemedText>
 
         <View style={{ height: 56 }}>
           <DatePickerInput
@@ -174,7 +186,15 @@ export const OverdueTodoForm = (props: OverdueTodoFormType) => {
         >
           Move to date
         </Button>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    padding: 20,
+  },
+});

@@ -56,6 +56,15 @@ export const addNewReward = createAsyncThunk(
   async (initialReward: NewRewardType) => {
     // We send the initial data to the firestore
 
+    console.log(
+      "reward slice addNewReward 59, data",
+      {
+        title: initialReward.title,
+        desc: initialReward.desc,
+        price: initialReward.price,
+      },
+      `users/user_${initialReward.userId}/rewards`
+    );
     const docRef = await addDoc(
       collection(db, `users/user_${initialReward.userId}/rewards`),
       {

@@ -110,14 +110,31 @@ export default function MainApp() {
         options={{
           // Set the presentation mode to modal for our modal route.
           presentation: "modal",
-          headerShown: false,
+          title: "Task Details",
         }}
       />
       <Stack.Screen
         name="todo/addtodo"
         options={{
           // Set the presentation mode to modal for our modal route.
-          presentation: "containedModal",
+          presentation: "modal",
+          title: "Add Todo",
+        }}
+      />
+      <Stack.Screen
+        name="todo/edittodo"
+        options={{
+          // Set the presentation mode to modal for our modal route.
+          presentation: "modal",
+          title: "Edit todo",
+        }}
+      />
+      <Stack.Screen
+        name="todo/overdue"
+        options={{
+          // Set the presentation mode to modal for our modal route.
+          presentation: "modal",
+          title: "Handle overdue task",
         }}
       />
     </Stack>

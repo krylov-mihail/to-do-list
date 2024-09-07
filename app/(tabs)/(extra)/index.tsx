@@ -21,11 +21,18 @@ export default function Page() {
           left={(props) => <List.Icon {...props} icon="folder" />}
         />
       </Link>
-      <Link href="/rewards" asChild>
+      <Link href="/history" asChild>
         <List.Item
-          title="Rewards"
-          description="Manage rewards"
-          left={(props) => <List.Icon {...props} icon="trophy" />}
+          title="History"
+          description="View history"
+          left={(props) => <List.Icon {...props} icon="history" />}
+        />
+      </Link>
+      <Link href="/help" asChild>
+        <List.Item
+          title="Help"
+          description="How to page"
+          left={(props) => <List.Icon {...props} icon="help-circle-outline" />}
         />
       </Link>
       <Logout></Logout>

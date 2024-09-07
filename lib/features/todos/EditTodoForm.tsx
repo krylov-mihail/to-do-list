@@ -2,7 +2,12 @@ import React, { ReactNode } from "react";
 
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { selectTodoById, updateTodo } from "./todosSlice";
-import { GestureResponderEvent, View } from "react-native";
+import {
+  GestureResponderEvent,
+  View,
+  StyleSheet,
+  SafeAreaView,
+} from "react-native";
 import { Button, TextInput, Title } from "react-native-paper";
 import { router } from "expo-router";
 import { Dropdown } from "react-native-paper-dropdown";
@@ -59,43 +64,53 @@ export const EditTodoForm = (props: EditTodoForm) => {
   };
 
   return (
-    <View>
-      <Title>Edit the Todo</Title>
+    <SafeAreaView style={styles.container}>
+      <View>
+        <Title>Edit the Todo</Title>
 
-      <TextInput
-        label="Todo Title:"
-        value={inputTitle}
-        onChangeText={(text) => setInputTitle(text)}
-      />
+        <TextInput
+          label="Todo Title:"
+          value={inputTitle}
+          onChangeText={(text) => setInputTitle(text)}
+        />
 
-      <TextInput
-        label="Todo Description:"
-        value={inputDesc}
-        onChangeText={(text) => setInputDesc(text)}
-      />
+        <TextInput
+          label="Todo Description:"
+          value={inputDesc}
+          onChangeText={(text) => setInputDesc(text)}
+        />
 
-      <Dropdown
-        label="Project"
-        placeholder="Select Project"
-        options={projects.map((project) => ({
-          label: project.title,
-          value: project.id,
-        }))}
-        value={inputProject}
-        onSelect={(text?: string) => {
-          console.log(text);
-          setInputProject(text as string);
-        }}
-      />
+        <Dropdown
+          label="Project"
+          placeholder="Select Project"
+          options={projects.map((project) => ({
+            label: project.title,
+            value: project.id,
+          }))}
+          value={inputProject}
+          onSelect={(text?: string) => {
+            console.log(text);
+            setInputProject(text as string);
+          }}
+        />
 
-      <Button
-        style={{ marginTop: 15 }}
-        icon="send"
-        mode="contained"
-        onPress={handleSubmit}
-      >
-        Save todo
-      </Button>
-    </View>
+        <Button
+          style={{ marginTop: 15 }}
+          icon="send"
+          mode="contained"
+          onPress={handleSubmit}
+        >
+          Save todo
+        </Button>
+      </View>
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    padding: 20,
+  },
+});

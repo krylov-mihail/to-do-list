@@ -37,12 +37,10 @@ export const AddRewardForm = () => {
     // Prevent server submission
     e.preventDefault();
 
-    console.log("Add Reward Form 51, Values: ", {
-      inputTitle,
-      inputDesc,
-      inputPrice,
-    });
-    if (!inputTitle || !inputDesc || !inputPrice) return;
+    if (!inputTitle || !inputDesc || !inputPrice) {
+      console.log(inputTitle, inputDesc, inputPrice);
+      return;
+    }
 
     try {
       await dispatch(addNewReward(newReward));
@@ -61,6 +59,13 @@ export const AddRewardForm = () => {
       <Title>Add a New Reward</Title>
 
       <TextInput
+        keyboardType="numeric"
+        label="Reward Price:"
+        value={inputPrice.toString()}
+        onChangeText={(text) => setInputPrice(text as unknown as number)}
+      />
+
+      <TextInput
         label="Reward Title:"
         value={inputTitle}
         onChangeText={(text) => setInputTitle(text)}
@@ -70,13 +75,6 @@ export const AddRewardForm = () => {
         label="Reward Description:"
         value={inputDesc}
         onChangeText={(text) => setInputDesc(text)}
-      />
-
-      <TextInput
-        keyboardType="numeric"
-        label="Reward Price:"
-        value={inputPrice.toString()}
-        onChangeText={(text) => setInputPrice(text as unknown as number)}
       />
 
       <Button

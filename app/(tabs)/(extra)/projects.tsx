@@ -1,10 +1,12 @@
 import { ProjectsList } from "@/lib/features/projects/projectsList";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
 export default function Page() {
   return (
     <SafeAreaView style={styles.container}>
-      <ProjectsList />
+      <ScrollView>
+        <ProjectsList />
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -12,8 +14,7 @@ export default function Page() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    backgroundColor: "#ecf0f1",
+    justifyContent: "flex-start",
     padding: 8,
   },
 });

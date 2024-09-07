@@ -1,7 +1,13 @@
 import { useAppSelector } from "@/lib/hooks";
 import { router } from "expo-router";
 import { ComponentProps, JSX, ReactNode, RefAttributes } from "react";
-import { StyleProp, View, ViewProps, ViewStyle } from "react-native";
+import {
+  StyleProp,
+  View,
+  ViewProps,
+  ViewStyle,
+  StyleSheet,
+} from "react-native";
 import {
   Avatar,
   Button,
@@ -43,16 +49,15 @@ export const SingleTodo = (props: SingleTodoProps) => {
   );
 
   return (
-    <Card>
+    <Card style={{ width: "90%" }}>
       <Card.Title
-        title="Todo Task"
-        subtitle="Todo Subtitle"
+        title={todoItem.title}
+        subtitle={<TimeSpan timestamp={todoItem.deadline} />}
         left={LeftContent}
       />
       <Card.Content>
-        <Chip icon="folder">{project?.title}</Chip>
-        <TimeSpan timestamp={todoItem.deadline} />
-        <Text variant="titleLarge">{todoItem.title}</Text>
+        <Chip icon="folder">Project: {project?.title}</Chip>
+
         <Text variant="bodyMedium">{todoItem.desc}</Text>
       </Card.Content>
 
@@ -69,3 +74,12 @@ export const SingleTodo = (props: SingleTodoProps) => {
     </Card>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "space-between",
+    backgroundColor: "#fff",
+    padding: 10,
+    margin: 0,
+  },
+});

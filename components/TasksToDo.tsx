@@ -8,6 +8,7 @@ import {
   RadioButton,
   Title,
   Text,
+  Button,
 } from "react-native-paper";
 
 type PropsType = {
@@ -26,7 +27,6 @@ export const TasksToDo = (props: PropsType) => {
   const renderedTodoList = tasks.map((todo) => (
     <Link key={todo.id} href={`/todo/${todo.id}`} asChild>
       <List.Item
-        key={todo.id}
         title={(props) => {
           return (
             <Text
@@ -44,11 +44,7 @@ export const TasksToDo = (props: PropsType) => {
         left={(props) => {
           if (status == "overdue") {
             return (
-              <Link
-                key={todo.id}
-                href={`/todo/overdue?slug=${todo.id}`}
-                asChild
-              >
+              <Link href={`/todo/overdue?slug=${todo.id}`} asChild>
                 <IconButton
                   {...props}
                   icon="clock-edit-outline"
@@ -84,11 +80,27 @@ export const TasksToDo = (props: PropsType) => {
             />
           );
         }}
-        right={(props) => (
-          <Link key={todo.id} href={`/todo/${todo.id}`} asChild>
-            <IconButton {...props} icon="arrow-right-circle" mode="contained" />
-          </Link>
-        )}
+        right={(props) => {
+          if (status == "overdue") {
+            return (
+              <Link href={`/todo/overdue?slug=${todo.id}`} asChild>
+                <Button {...props} compact={true} mode="contained">
+                  Handle
+                </Button>
+              </Link>
+            );
+          } else {
+            return (
+              <Link href={`/todo/${todo.id}`} asChild>
+                <IconButton
+                  {...props}
+                  icon="arrow-right-circle"
+                  mode="contained"
+                />
+              </Link>
+            );
+          }
+        }}
       />
     </Link>
   ));
