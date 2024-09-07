@@ -5,15 +5,19 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/lib/hooks/useColorScheme";
 
-import { Drawer as PaperDrawer } from "react-native-paper";
+import { Drawer as PaperDrawer, Text } from "react-native-paper";
 
-const SideMenu = () => (
-  <PaperDrawer.CollapsedItem
-    focusedIcon="inbox"
-    unfocusedIcon="inbox-outline"
-    label="Inbox"
-  />
-);
+const SideMenu = () => {
+  return (
+    <>
+      <PaperDrawer.CollapsedItem
+        focusedIcon="inbox"
+        unfocusedIcon="inbox-outline"
+        label="Inbox"
+      />
+    </>
+  );
+};
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();

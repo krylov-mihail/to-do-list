@@ -1,4 +1,8 @@
-import { selectUser } from "@/lib/features/user/userSlice";
+import {
+  fetchDataForUser,
+  selectDataStatus,
+  selectUser,
+} from "@/lib/features/user/userSlice";
 import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native";
 import { useSelector } from "react-redux";
@@ -80,6 +84,18 @@ export default function MainApp() {
       dispatch(fetchRewardsForUser(currentUser.user.uid));
     }
   }, [rewardsStatus, dispatch]);
+
+  /* 5.Load User Data from  Fire store*/
+  /*monitore loading status as we make a async request behind the scene */
+  const userDataStatus = useAppSelector(selectDataStatus);
+
+  // update todos if loading  status has changes
+  useEffect(() => {
+    if (userDataStatus === "idle") {
+      // need to replace with real user id
+      dispatch(fetchDataForUser(currentUser.user.uid));
+    }
+  }, [userDataStatus, dispatch]);
 
   return (
     <Stack>

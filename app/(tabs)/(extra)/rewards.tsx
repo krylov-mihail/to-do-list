@@ -1,10 +1,19 @@
+import { UnclaimedReward } from "@/components/UnclaimedReward";
 import { RewardsList } from "@/lib/features/rewards/rewardsList";
-import { SafeAreaView, StyleSheet } from "react-native";
-
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import { useAppSelector } from "@/lib/hooks";
+import { selectUserData } from "@/lib/features/user/userSlice";
+import { Text } from "react-native-paper";
 export default function Page() {
+  const userData = useAppSelector(selectUserData);
+
   return (
     <SafeAreaView style={styles.container}>
-      <RewardsList />
+      <ScrollView>
+        <Text>Available points: {userData.points}</Text>
+        <UnclaimedReward />
+        <RewardsList />
+      </ScrollView>
     </SafeAreaView>
   );
 }

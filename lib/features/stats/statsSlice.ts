@@ -38,6 +38,7 @@ export type StatsType = {
   completedTaskCount: number;
   totalPoints: number;
   completedPoints: number;
+  rewardRecieved: boolean;
 };
 
 export type StatsUpdateType = Pick<
@@ -61,6 +62,10 @@ export type StatsNewType = Pick<
   | "totalPoints"
   | "completedPoints"
 > & {
+  userId: string;
+};
+
+export type ClaimRewardType = Pick<StatsType, "id"> & {
   userId: string;
 };
 
@@ -155,6 +160,31 @@ export const updateStats = createAsyncThunk(
   }
 );
 
+export const claimReward = createAsyncThunk(
+  "stats/claimReward",
+
+  async (statsData: ClaimRewardType) => {
+    // We send the initial data to the firestore
+    const id = statsData.id;
+
+    console.log("statsSlice 170", `users/user_${statsData.userId}/stats`, id);
+
+    const docRef = await setDoc(
+      doc(db, `users/user_${statsData.userId}/stats`, id),
+      {
+        rewardRecieved: true,
+      },
+      { merge: true }
+    );
+    // The response includes the complete post object, including unique ID
+
+    return {
+      id: id,
+      claimReward: true,
+    };
+  }
+);
+
 export const addNewStats = createAsyncThunk(
   "stats/addNewStats",
   // The payload creator receives the partial `{title, desc, projectId,deadline, status, userId}` object
@@ -175,7 +205,9 @@ export const addNewStats = createAsyncThunk(
         completedTaskCount: initialStatsData.completedTaskCount,
         totalPoints: initialStatsData.totalPoints,
         completedPoints: initialStatsData.completedPoints,
-      }
+        rewardRecieved: false,
+      },
+      { merge: true }
     );
     // The response includes the complete post object, including unique ID
 
@@ -225,6 +257,14 @@ export const statsSlice = createSlice({
       .addCase(fetchStatsForUser.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.error.message ?? "Unknown Error";
+      })
+      .addCase(claimReward.fulfilled, (state, action) => {
+        const statsId = action.payload.id;
+        const stats = state.historyStats.find((st) => st.id === statsId);
+
+        if (stats) {
+          stats.rewardRecieved = true;
+        }
       })
       .addCase(addNewStats.fulfilled, (state, action) => {
         const currentDateString = new Date().toISOString().slice(0, 10);
