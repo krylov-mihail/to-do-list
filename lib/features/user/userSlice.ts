@@ -66,7 +66,7 @@ export const fetchDataForUser = createAsyncThunk(
   async (userId: string) => {
     const item = await getData(db, userId);
 
-    return item as { points: number };
+    return item as { points: number; email: string; id: string };
   },
   // third optional argument to prefent  double fetching
   {
@@ -146,7 +146,12 @@ export const userSlice = createSlice({
         // state.status = "succeeded";
       })
       .addCase(fetchDataForUser.fulfilled, (state, action) => {
-        state.data = action.payload as UserDataInterface;
+        console.log("payload data:", action.payload);
+
+        state.data.points = action.payload.points;
+        state.data.email = action.payload.email;
+        state.data.id = action.payload.id;
+        state.data.status = "succeeded";
       })
       .addCase(addNewUser.rejected, (state, action) => {
         // failed to create the user

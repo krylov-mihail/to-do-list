@@ -14,6 +14,9 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { useAppDispatch } from "@/lib/hooks";
+import { addNewProject } from "@/lib/features/projects/projectsSlice";
+import { addNewReward } from "@/lib/features/rewards/rewardsSlice";
+import { router } from "expo-router";
 
 export default function Login() {
   /*const user = auth.currentUser;*/
@@ -88,7 +91,7 @@ export default function Login() {
     /*process login logic*/
 
     createUserWithEmailAndPassword(auth, username.value, pswd.value)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed up
         const user = userCredential.user;
 
@@ -106,7 +109,50 @@ export default function Login() {
         );
         // create  user in firestore
 
-        dispatch(addNewUser({ id: user.uid, email: user.email as string }));
+        await dispatch(
+          addNewUser({ id: user.uid, email: user.email as string })
+        );
+
+        // we want to prepopulate some data for a new user
+        // 1. create default project
+        // 2. add sample rewards
+
+        await dispatch(
+          addNewProject({
+            userId: user.uid,
+            title: "Uncategorized",
+            desc: "This is a project to place all tasks that do not fit any other project",
+          })
+        );
+
+        await dispatch(
+          addNewReward({
+            userId: user.uid,
+            title: "TV series - 30 min",
+            desc: "Watch TV series",
+            price: 30,
+          })
+        );
+
+        await dispatch(
+          addNewReward({
+            userId: user.uid,
+            title: "TV series - 60 min",
+            desc: "Watch TV series",
+            price: 50,
+          })
+        );
+
+        await dispatch(
+          addNewReward({
+            userId: user.uid,
+            title: "Chocolate bar",
+            desc: "Buy a chocolate bar",
+            price: 10,
+          })
+        );
+        // redirect to the help screen
+        router.push("/(tabs)/(modal)");
       })
       .catch((error) => {
         const errorCode = error.code;
