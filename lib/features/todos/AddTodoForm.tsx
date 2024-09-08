@@ -150,7 +150,7 @@ export const AddTodoForm = () => {
                 <Picker.Item
                   key={`${point} points`}
                   label={`${point} points`}
-                  value={`${point}`}
+                  value={point}
                 />
               );
             })}
