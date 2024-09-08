@@ -33,7 +33,9 @@ export const useStats = () => {
           statsDate: todoDeadlineDate,
           totalTaskCount: 1,
           completedTaskCount: 0,
-          totalPoints: newTodo.points ? newTodo.points : 0,
+          totalPoints: newTodo.points
+            ? parseInt(newTodo.points as any as string)
+            : 0,
           completedPoints: 0,
           userId: currentUser.user.uid,
         };
